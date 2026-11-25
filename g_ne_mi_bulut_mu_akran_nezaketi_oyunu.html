@@ -1,0 +1,1167 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Güneş mi, Bulut mu? - Akran Nezaketi Oyunu</title>
+  <!-- Çocuk dostu, yuvarlak hatlı ve Türkçe karakter destekli fontlar -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --font-display: 'Fredoka', 'Nunito', sans-serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      font-family: var(--font-display);
+      background: linear-gradient(180deg, #bae6fd 0%, #e0f2fe 45%, #fef9c3 85%, #dcfce7 100%);
+      touch-action: none;
+    }
+
+    /* Arka Plan ve Kutu Animasyonları */
+    @keyframes spinSlow {
+      0% { transform: rotate(0deg); }
+      100% { transform: rotate(360deg); }
+    }
+
+    @keyframes floatCloud {
+      0%, 100% { transform: translateX(0px) translateY(0px); }
+      50% { transform: translateX(14px) translateY(-5px); }
+    }
+
+    @keyframes grumpyBob {
+      0%, 100% { transform: translateY(0px) rotate(-1deg); }
+      50% { transform: translateY(5px) rotate(1.5deg); }
+    }
+
+    @keyframes cardFloat {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-5px); }
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(0.3) rotate(-30deg); }
+      60% { transform: scale(1.35) rotate(12deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes boxCelebrate {
+      0%, 100% { transform: scale(1); }
+      35% { transform: scale(1.09) rotate(-2deg); }
+      70% { transform: scale(1.05) rotate(2deg); }
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      18% { transform: translate3d(-14px, 0, 0) rotate(-3deg); }
+      36% { transform: translate3d(14px, 0, 0) rotate(3deg); }
+      54% { transform: translate3d(-10px, 0, 0) rotate(-2deg); }
+      72% { transform: translate3d(10px, 0, 0) rotate(2deg); }
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(0.4); opacity: 0; }
+      50% { transform: scale(1.15); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes playBtnPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 12px 0 #15803d, 0 20px 35px rgba(22, 163, 74, 0.45); }
+      50% { transform: scale(1.04); box-shadow: 0 14px 0 #15803d, 0 25px 45px rgba(22, 163, 74, 0.65); }
+    }
+
+    .sun-rays {
+      transform-origin: center;
+      animation: spinSlow 28s linear infinite;
+    }
+
+    .cloud-drift {
+      animation: floatCloud 6s ease-in-out infinite;
+    }
+
+    .grumpy-cloud {
+      animation: grumpyBob 4.5s ease-in-out infinite;
+    }
+
+    .card-idle {
+      animation: cardFloat 3.4s ease-in-out infinite;
+    }
+
+    .card-selected {
+      box-shadow: 0 0 0 6px #facc15, 0 22px 40px rgba(0, 0, 0, 0.22) !important;
+    }
+
+    .card-shake {
+      animation: gentleShake 0.55s ease-in-out !important;
+    }
+
+    .badge-pop {
+      animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .star-filled {
+      animation: starPop 0.5s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .box-celebrate {
+      animation: boxCelebrate 0.6s ease-in-out;
+    }
+
+    .play-btn-hero {
+      animation: playBtnPulse 2s ease-in-out infinite;
+    }
+
+    .play-btn-hero:active {
+      transform: translateY(6px) scale(0.98) !important;
+      box-shadow: 0 6px 0 #15803d, 0 10px 20px rgba(22, 163, 74, 0.4) !important;
+    }
+
+    /* Hedef Kutuların Vurgu Efektleri */
+    .target-box {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .target-box.hover-green {
+      transform: scale(1.07) translateY(-6px);
+      box-shadow: 0 0 0 8px #fde047, 0 22px 42px rgba(22, 163, 74, 0.6);
+      filter: brightness(1.07);
+    }
+
+    .target-box.hover-red {
+      transform: scale(1.07) translateY(-6px);
+      box-shadow: 0 0 0 8px #fca5a5, 0 22px 42px rgba(220, 38, 38, 0.6);
+      filter: brightness(1.07);
+    }
+
+    /* Sürüklenebilir Kart Stili */
+    #behavior-card {
+      touch-action: none;
+      cursor: grab;
+      will-change: transform;
+    }
+
+    #behavior-card.dragging {
+      cursor: grabbing;
+      animation: none !important;
+      z-index: 50;
+      box-shadow: 0 28px 50px rgba(15, 23, 42, 0.32);
+    }
+
+    /* Parçacık ve Konfeti Katmanı */
+    #effects-layer {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      overflow: hidden;
+    }
+
+    .burst-particle {
+      position: absolute;
+      font-size: 2rem;
+      pointer-events: none;
+      transition: transform 0.85s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.85s ease-out;
+    }
+  </style>
+</head>
+<body class="relative w-full h-[100dvh] select-none">
+
+  <!-- ARKA PLAN DEKORASYONU (Sol Üst Güneş, Sağ Üst Bulut ve Süzülen Bulutlar) -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+    <!-- Sol Üst Gülen Güneş -->
+    <div class="absolute -top-6 -left-6 sm:-top-4 sm:-left-4 w-28 h-28 sm:w-40 sm:h-40 opacity-95">
+      <svg viewBox="0 0 160 160" class="w-full h-full overflow-visible">
+        <g class="sun-rays">
+          <circle cx="80" cy="80" r="68" fill="none" stroke="#facc15" stroke-width="10" stroke-dasharray="14 14" stroke-linecap="round" />
+        </g>
+        <circle cx="80" cy="80" r="46" fill="#fde047" stroke="#f59e0b" stroke-width="4" />
+        <!-- Güneş Yüzü -->
+        <circle cx="65" cy="73" r="5" fill="#78350f" />
+        <circle cx="95" cy="73" r="5" fill="#78350f" />
+        <circle cx="67" cy="71" r="1.8" fill="#ffffff" />
+        <circle cx="97" cy="71" r="1.8" fill="#ffffff" />
+        <ellipse cx="56" cy="83" rx="6" ry="3.5" fill="#fb923c" opacity="0.65" />
+        <ellipse cx="104" cy="83" rx="6" ry="3.5" fill="#fb923c" opacity="0.65" />
+        <path d="M 65 88 Q 80 103 95 88" fill="none" stroke="#78350f" stroke-width="4.5" stroke-linecap="round" />
+      </svg>
+    </div>
+
+    <!-- Sağ Üst Somurtkan Yağmur Bulutu -->
+    <div class="absolute top-12 -right-4 sm:top-10 sm:right-2 w-28 h-24 sm:w-40 sm:h-32 grumpy-cloud opacity-90">
+      <svg viewBox="0 0 180 140" class="w-full h-full overflow-visible">
+        <!-- Yağmur Damlaları -->
+        <path d="M55 108 L50 122" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+        <path d="M90 112 L85 126" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+        <path d="M125 108 L120 122" stroke="#38bdf8" stroke-width="4" stroke-linecap="round" />
+        <!-- Bulut Gövdesi -->
+        <path d="M45 98 H135 C152 98 164 86 164 70 C164 55 152 44 138 43 C133 24 115 12 94 12 C75 12 59 23 53 39 C35 41 22 55 22 72 C22 87 32 98 45 98 Z" fill="#94a3b8" stroke="#64748b" stroke-width="4" />
+        <!-- Çatık Kaşlar ve Üzgün Ağız -->
+        <path d="M68 55 L82 61" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+        <path d="M112 55 L98 61" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+        <circle cx="75" cy="67" r="4.5" fill="#1e293b" />
+        <circle cx="105" cy="67" r="4.5" fill="#1e293b" />
+        <path d="M76 86 Q 90 75 104 86" fill="none" stroke="#1e293b" stroke-width="4" stroke-linecap="round" />
+      </svg>
+    </div>
+
+    <!-- Dekoratif Beyaz Bulutlar -->
+    <div class="hidden md:block absolute top-24 left-44 w-32 h-16 cloud-drift opacity-75">
+      <svg viewBox="0 0 140 70" class="w-full h-full">
+        <path d="M25 58 H115 C127 58 135 49 135 38 C135 28 127 20 117 19 C112 8 100 2 86 2 C72 2 60 9 56 20 C42 21 32 31 32 43 C32 52 16 58 25 58 Z" fill="#ffffff" />
+      </svg>
+    </div>
+
+    <!-- Alt Çimen Şeridi -->
+    <div class="absolute bottom-0 inset-x-0 h-8 sm:h-12 bg-gradient-to-t from-green-300/60 to-transparent"></div>
+  </div>
+
+  <!-- EFEKTLER VE KONFETİ KATMANI -->
+  <div id="effects-layer"></div>
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 hidden"></canvas>
+
+  <!-- ANA UYGULAMA KONTEYNERİ (100dvh, kaydırmasız) -->
+  <div id="app" class="relative z-10 w-full h-[100dvh] flex flex-col justify-between items-center px-3 py-2 sm:px-6 sm:py-3 max-w-5xl mx-auto">
+
+    <!-- 1. ÜST BAŞLIK, 8 YILDIZLI İLERLEME ÇUBUĞU VE YENİDEN BAŞLAT BUTONU -->
+    <header class="w-full flex flex-wrap sm:flex-nowrap items-center justify-between gap-2 pt-0.5">
+      <!-- Sol: Güneş ve Bulut İkonlu Oyun Başlığı -->
+      <div class="flex items-center gap-1.5 bg-white/85 backdrop-blur-sm px-3 py-1.5 rounded-full shadow-sm border-2 border-sky-200 shrink-0">
+        <span class="text-lg sm:text-2xl leading-none">☀️</span>
+        <span class="font-black text-sky-900 text-xs sm:text-base tracking-tight">Güneş mi, Bulut mu?</span>
+        <span class="text-lg sm:text-2xl leading-none">🌧️</span>
+      </div>
+
+      <!-- Orta: 8 Büyük Yıldızlı İlerleme Çubuğu -->
+      <div id="stars-container" class="order-3 sm:order-2 w-full sm:w-auto flex items-center justify-center gap-1 sm:gap-2 bg-white/90 backdrop-blur-sm px-3 py-1.5 sm:px-4 sm:py-2 rounded-full shadow-md border-2 border-amber-200">
+        <!-- JS ile 8 yıldız yuvası doldurulacak -->
+      </div>
+
+      <!-- Sağ: Küçük Yeniden Başlat Butonu -->
+      <button id="btn-restart-top" type="button" title="Yeniden Başlat" aria-label="Yeniden Başlat"
+        class="order-2 sm:order-3 px-3 py-1.5 sm:px-3.5 sm:py-2 bg-white/90 hover:bg-sky-50 active:scale-95 text-sky-700 font-extrabold text-xs sm:text-sm rounded-full shadow-sm border-2 border-sky-200 transition flex items-center gap-1.5 shrink-0 cursor-pointer">
+        <svg class="w-4 h-4 sm:w-5 sm:h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+        <span>Yeniden Başlat</span>
+      </button>
+    </header>
+
+    <!-- 2. ORTA KART ALANI (Sürüklenecek veya Dokunulacak Davranış Kartı) -->
+    <main class="flex-1 w-full flex flex-col items-center justify-center my-1 relative min-h-0">
+
+      <!-- Görsel Geri Bildirim Rozetleri (Doğru Onay / Tekrar Dene Oku) -->
+      <div id="feedback-badge-correct" class="hidden fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
+        <div class="badge-pop w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-emerald-500 border-8 border-white shadow-2xl flex items-center justify-center">
+          <svg class="w-16 h-16 sm:w-20 sm:h-20 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Sürüklenecek Davranış Kartı -->
+      <div id="behavior-card"
+        class="card-idle relative w-[86vw] max-w-[350px] sm:max-w-[430px] bg-white rounded-[2rem] p-2.5 sm:p-3.5 shadow-xl border-4 border-sky-300 flex flex-col items-center justify-between transition-colors">
+
+        <!-- Yanlış Kutu Seçildiğinde Çıkan "Tekrar Dene" Kıvrımlı Ok Rozeti -->
+        <div id="feedback-badge-retry" class="hidden absolute -top-5 -right-5 z-30 w-14 h-14 sm:w-16 sm:h-16 rounded-full bg-orange-500 border-4 border-white shadow-lg flex items-center justify-center text-white badge-pop pointer-events-none">
+          <svg class="w-8 h-8 sm:w-9 sm:h-9" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M9 14 4 9l5-5"></path>
+            <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"></path>
+          </svg>
+        </div>
+
+        <!-- SVG İllüstrasyon Sahnesi -->
+        <div id="card-illustration" class="w-full aspect-[16/10] rounded-2xl overflow-hidden bg-sky-50 border-2 border-slate-100 flex items-center justify-center pointer-events-none">
+          <!-- Aktif senaryonun özel çizgi film SVG sahnesi buraya yerleşir -->
+        </div>
+
+        <!-- Öğretmen İçin Kartın Alt Kenarında Küçük, İnce Referans Açıklaması -->
+        <p id="card-label" class="mt-1.5 text-[11px] sm:text-xs font-semibold text-slate-400 tracking-tight text-center pointer-events-none">
+          Oyuncağını paylaşmak
+        </p>
+      </div>
+    </main>
+
+    <!-- 3. ALT KISIM - İKİ DEV HEDEF KUTU (NEZAKET KUTUSU & KABA KUTUSU) -->
+    <section class="w-full grid grid-cols-2 gap-3 sm:gap-6 pb-1 sm:pb-2 max-w-3xl shrink-0">
+
+      <!-- SOL KUTU: YEŞİL NEZAKET KUTUSU -->
+      <div id="box-good" data-type="good" role="button" tabindex="0" aria-label="Nezaket Kutusu - İyi Davranışlar"
+        class="target-box relative rounded-[1.75rem] sm:rounded-[2.25rem] bg-gradient-to-b from-emerald-400 to-green-600 border-4 border-emerald-200 shadow-[0_8px_0_#15803d,0_14px_24px_rgba(22,163,74,0.35)] p-2.5 sm:p-4 flex flex-col items-center justify-between cursor-pointer overflow-hidden">
+
+        <!-- Üst Simgeler: Gülen Güneş + Yeşil Kalp + Onay İşareti (✓) -->
+        <div class="w-full flex items-center justify-between px-1 sm:px-2 pointer-events-none">
+          <!-- Büyük Gülen Güneş İkonu -->
+          <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-yellow-300 border-3 border-amber-500 flex items-center justify-center shadow-md">
+            <svg viewBox="0 0 64 64" class="w-9 h-9 sm:w-11 sm:h-11">
+              <circle cx="32" cy="32" r="18" fill="#fde047" stroke="#d97706" stroke-width="3" />
+              <path d="M32 4 V10 M32 54 V60 M4 32 H10 M54 32 H60 M12 12 L16 16 M48 48 L52 52 M52 12 L48 16 M16 48 L12 52" stroke="#f59e0b" stroke-width="4" stroke-linecap="round" />
+              <circle cx="26" cy="29" r="2.5" fill="#78350f" />
+              <circle cx="38" cy="29" r="2.5" fill="#78350f" />
+              <path d="M25 36 Q32 43 39 36" fill="none" stroke="#78350f" stroke-width="3" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- Yeşil Kalp & Beyaz Onay İşareti -->
+          <div class="flex items-center gap-1.5 sm:gap-2 bg-white/25 px-2.5 py-1 rounded-full">
+            <span class="text-xl sm:text-2xl leading-none">💚</span>
+            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white text-green-600 flex items-center justify-center font-black text-base sm:text-xl shadow-sm">
+              ✓
+            </span>
+          </div>
+        </div>
+
+        <!-- Kutu Yüzü (Gülümseyen Sevimli Kutu İfadesi) -->
+        <div class="my-0.5 sm:my-1.5 flex flex-col items-center pointer-events-none">
+          <svg class="w-20 h-11 sm:w-28 sm:h-15" viewBox="0 0 120 70">
+            <circle cx="38" cy="24" r="7" fill="#064e3b" />
+            <circle cx="82" cy="24" r="7" fill="#064e3b" />
+            <circle cx="40" cy="21" r="2.5" fill="#ffffff" />
+            <circle cx="84" cy="21" r="2.5" fill="#ffffff" />
+            <ellipse cx="24" cy="36" rx="8" ry="4.5" fill="#fda4af" opacity="0.85" />
+            <ellipse cx="96" cy="36" rx="8" ry="4.5" fill="#fda4af" opacity="0.85" />
+            <path d="M 38 38 Q 60 62 82 38 Z" fill="#fef08a" stroke="#064e3b" stroke-width="4" stroke-linejoin="round" />
+          </svg>
+        </div>
+
+        <!-- Kutu Başlığı -->
+        <div class="w-full bg-white/95 rounded-2xl py-1 sm:py-1.5 px-2 text-center shadow-inner pointer-events-none">
+          <span class="block text-green-700 font-black text-sm sm:text-xl tracking-wide">
+            NEZAKET KUTUSU
+          </span>
+        </div>
+      </div>
+
+      <!-- SAĞ KUTU: KIRMIZI KABA KUTUSU -->
+      <div id="box-bad" data-type="bad" role="button" tabindex="0" aria-label="Kaba Kutusu - Kötü Davranışlar"
+        class="target-box relative rounded-[1.75rem] sm:rounded-[2.25rem] bg-gradient-to-b from-rose-500 to-red-600 border-4 border-rose-200 shadow-[0_8px_0_#991b1b,0_14px_24px_rgba(220,38,38,0.35)] p-2.5 sm:p-4 flex flex-col items-center justify-between cursor-pointer overflow-hidden">
+
+        <!-- Üst Simgeler: Kaşları Çatık Yağmur Bulutu + Çarpı İşareti (✕) -->
+        <div class="w-full flex items-center justify-between px-1 sm:px-2 pointer-events-none">
+          <!-- Büyük Somurtkan Fırtına Bulutu İkonu -->
+          <div class="w-11 h-11 sm:w-14 sm:h-14 rounded-full bg-slate-200 border-3 border-slate-500 flex items-center justify-center shadow-md">
+            <svg viewBox="0 0 64 64" class="w-9 h-9 sm:w-11 sm:h-11">
+              <path d="M16 44 H48 C54 44 58 40 58 34 C58 29 54 25 49 25 C47 18 41 13 33 13 C26 13 20 17 18 23 C12 24 8 29 8 35 C8 40 11 44 16 44 Z" fill="#94a3b8" stroke="#475569" stroke-width="3" />
+              <path d="M23 27 L29 30 M41 27 L35 30" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" />
+              <circle cx="26" cy="33" r="2" fill="#1e293b" />
+              <circle cx="38" cy="33" r="2" fill="#1e293b" />
+              <path d="M26 40 Q32 35 38 40" fill="none" stroke="#1e293b" stroke-width="2.5" stroke-linecap="round" />
+              <path d="M22 48 L20 54 M32 49 L30 55 M42 48 L40 54" stroke="#0284c7" stroke-width="2.5" stroke-linecap="round" />
+            </svg>
+          </div>
+
+          <!-- Çarpı İşareti -->
+          <div class="flex items-center gap-1.5 bg-white/25 px-2.5 py-1 rounded-full">
+            <span class="w-7 h-7 sm:w-8 sm:h-8 rounded-full bg-white text-red-600 flex items-center justify-center font-black text-base sm:text-xl shadow-sm">
+              ✕
+            </span>
+          </div>
+        </div>
+
+        <!-- Kutu Yüzü (Üzgün / Kaşları Çatık Kutu İfadesi) -->
+        <div class="my-0.5 sm:my-1.5 flex flex-col items-center pointer-events-none">
+          <svg class="w-20 h-11 sm:w-28 sm:h-15" viewBox="0 0 120 70">
+            <path d="M 27 14 L 47 22" stroke="#450a0a" stroke-width="4.5" stroke-linecap="round" />
+            <path d="M 93 14 L 73 22" stroke="#450a0a" stroke-width="4.5" stroke-linecap="round" />
+            <circle cx="38" cy="28" r="6.5" fill="#450a0a" />
+            <circle cx="82" cy="28" r="6.5" fill="#450a0a" />
+            <circle cx="40" cy="26" r="2" fill="#ffffff" />
+            <circle cx="84" cy="26" r="2" fill="#ffffff" />
+            <path d="M 40 52 Q 60 35 80 52" fill="none" stroke="#450a0a" stroke-width="5" stroke-linecap="round" />
+          </svg>
+        </div>
+
+        <!-- Kutu Başlığı -->
+        <div class="w-full bg-white/95 rounded-2xl py-1 sm:py-1.5 px-2 text-center shadow-inner pointer-events-none">
+          <span class="block text-red-700 font-black text-sm sm:text-xl tracking-wide">
+            KABA KUTUSU
+          </span>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- BAŞLANGIÇ EKRANI (Tam Ekran Kaplama, Tamamen Sessiz) -->
+  <!-- ========================================================= -->
+  <div id="start-screen" class="fixed inset-0 z-40 bg-gradient-to-b from-sky-300/95 via-sky-100/95 to-amber-100/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+    <!-- Maskot İkonları -->
+    <div class="flex items-center justify-center gap-5 sm:gap-8 mb-5">
+      <div class="w-22 h-22 sm:w-28 sm:h-28 bg-yellow-300 rounded-full border-4 border-amber-400 shadow-lg flex items-center justify-center text-5xl sm:text-6xl animate-bounce">
+        ☀️
+      </div>
+      <div class="w-22 h-22 sm:w-28 sm:h-28 bg-slate-200 rounded-full border-4 border-slate-400 shadow-lg flex items-center justify-center text-5xl sm:text-6xl grumpy-cloud">
+        🌧️
+      </div>
+    </div>
+
+    <!-- Oyun Başlığı -->
+    <h1 class="text-4xl sm:text-6xl font-black text-sky-900 drop-shadow-sm tracking-tight mb-2">
+      Güneş mi, Bulut mu?
+    </h1>
+    <p class="text-lg sm:text-2xl font-extrabold text-emerald-700 bg-white/85 px-6 py-1.5 rounded-full border-2 border-emerald-300 mb-9 shadow-sm">
+      Akran Nezaketi Oyunu
+    </p>
+
+    <!-- Dev Parlayan Yeşil OYNA Butonu -->
+    <button id="btn-start-game" type="button"
+      class="play-btn-hero group relative bg-gradient-to-b from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-white rounded-[2.5rem] px-10 py-6 sm:px-14 sm:py-8 border-4 border-green-200 flex items-center gap-4 sm:gap-6 cursor-pointer transition">
+      <span class="w-14 h-14 sm:w-20 sm:h-20 rounded-full bg-white text-green-600 flex items-center justify-center shadow-md">
+        <svg class="w-8 h-8 sm:w-12 sm:h-12 ml-1" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="6 4 20 12 6 20 6 4"></polygon>
+        </svg>
+      </span>
+      <span class="text-4xl sm:text-6xl font-black tracking-wider drop-shadow">
+        OYNA
+      </span>
+      <span class="text-3xl sm:text-5xl">⭐</span>
+    </button>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- OYUN SONU KUTLAMA EKRANI (8/8 Tamamlandığında) -->
+  <!-- ========================================================= -->
+  <div id="victory-screen" class="hidden fixed inset-0 z-40 bg-gradient-to-b from-amber-200/95 via-yellow-100/95 to-emerald-200/95 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center">
+    <!-- 8 Parlayan Altın Yıldız Dizisi -->
+    <div class="flex items-center justify-center gap-1.5 sm:gap-2.5 mb-3 bg-white/80 px-4 py-2 rounded-full border-2 border-amber-300 shadow-sm">
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+    </div>
+
+    <!-- Büyük Gülen Güneş Nezaket Kahramanı Rozeti SVG -->
+    <div class="w-40 h-40 sm:w-52 sm:h-52 mb-3 drop-shadow-xl star-filled">
+      <svg viewBox="0 0 220 220" class="w-full h-full">
+        <!-- Kurdele Uçları -->
+        <polygon points="75,148 55,212 82,197 100,214 105,152" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+        <polygon points="145,148 165,212 138,197 120,214 115,152" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+        <!-- Güneş Işınları -->
+        <circle cx="110" cy="92" r="76" fill="none" stroke="#f59e0b" stroke-width="12" stroke-dasharray="14 14" stroke-linecap="round" />
+        <!-- Güneş Madalya Dairesi -->
+        <circle cx="110" cy="92" r="56" fill="#fde047" stroke="#d97706" stroke-width="5" />
+        <!-- Mutlu Güneş Yüzü -->
+        <circle cx="92" cy="82" r="6.5" fill="#78350f" />
+        <circle cx="128" cy="82" r="6.5" fill="#78350f" />
+        <circle cx="94" cy="79" r="2.2" fill="#ffffff" />
+        <circle cx="130" cy="79" r="2.2" fill="#ffffff" />
+        <ellipse cx="80" cy="95" rx="8" ry="4.5" fill="#fb923c" opacity="0.7" />
+        <ellipse cx="140" cy="95" rx="8" ry="4.5" fill="#fb923c" opacity="0.7" />
+        <path d="M 88 102 Q 110 124 132 102" fill="none" stroke="#78350f" stroke-width="5.5" stroke-linecap="round" />
+        <text x="22" y="42" font-size="24">✨</text>
+        <text x="174" y="42" font-size="24">✨</text>
+      </svg>
+    </div>
+
+    <div class="bg-white/95 border-4 border-amber-400 rounded-3xl px-6 py-4 mb-6 shadow-lg max-w-lg">
+      <p class="text-2xl sm:text-4xl font-black text-emerald-700 leading-tight">
+        Harika! Nezaket Kahramanı Oldun!
+      </p>
+    </div>
+
+    <!-- Büyük TEKRAR OYNA Butonu -->
+    <button id="btn-play-again" type="button"
+      class="play-btn-hero bg-gradient-to-b from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-white rounded-[2.2rem] px-9 py-5 sm:px-12 sm:py-6 border-4 border-green-200 flex items-center gap-4 cursor-pointer transition">
+      <svg class="w-8 h-8 sm:w-10 sm:h-10" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+        <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+        <path d="M3 3v5h5"></path>
+      </svg>
+      <span class="text-2xl sm:text-4xl font-black tracking-wide">
+        Tekrar Oyna
+      </span>
+    </button>
+  </div>
+
+  <!-- ========================================================= -->
+  <!-- TAMAMEN SESSİZ OYUN MANTIĞI & 8 GÖRSEL SENARYO -->
+  <!-- ========================================================= -->
+  <script>
+    /**
+     * 1. 8 ADET DAVRANIŞ SENARYOSU VE ÖZEL ÇİZGİ FİLM SVG SAHNELERİ
+     * Okuma bilmeyen 1. sınıf öğrencilerinin tek bakışta anlayabileceği netlikte
+     * mimikler, duruşlar, kalpler, gözyaşları ve hareket çizgileri içerir.
+     */
+    const SCENARIOS = [
+      {
+        id: 1,
+        type: 'good',
+        title: 'Oyuncağını paylaşmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef9c3" />
+            <ellipse cx="180" cy="195" rx="155" ry="22" fill="#fde047" opacity="0.6" />
+            <!-- Ortada Sevgi Kalbi -->
+            <path d="M180 56 C180 56 156 40 156 26 C156 18 162 13 170 13 C175 13 178 16 180 19 C182 16 185 13 190 13 C198 13 204 18 204 26 C204 40 180 56 180 56 Z" fill="#f43f5e" />
+            <!-- Sol Çocuk (Mutlu) -->
+            <circle cx="95" cy="90" r="32" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <circle cx="62" cy="80" r="14" fill="#7c2d12" />
+            <path d="M65 84 Q95 50 125 84 Q115 54 95 54 Q75 54 65 84 Z" fill="#7c2d12" />
+            <circle cx="85" cy="88" r="4" fill="#1e293b" />
+            <circle cx="105" cy="88" r="4" fill="#1e293b" />
+            <path d="M86 101 Q95 112 104 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M65 186 L72 130 Q95 122 118 130 L125 186 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <path d="M115 142 L154 146" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <!-- Sağ Çocuk (Mutlu) -->
+            <circle cx="265" cy="90" r="32" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M234 84 Q265 52 296 84 Q288 53 265 53 Q242 53 234 84 Z" fill="#1e293b" />
+            <circle cx="255" cy="88" r="4" fill="#1e293b" />
+            <circle cx="275" cy="88" r="4" fill="#1e293b" />
+            <path d="M256 101 Q265 112 274 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M235 186 L242 130 Q265 122 288 130 L295 186 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M245 142 L206 146" stroke="#fde68a" stroke-width="12" stroke-linecap="round" />
+            <!-- Ortada Birlikte Paylaşılan Renkli Oyun Topu ve Ayıcık -->
+            <circle cx="180" cy="144" r="24" fill="#ffffff" stroke="#1e293b" stroke-width="3" />
+            <path d="M162 130 Q180 144 198 130 M162 158 Q180 144 198 158" fill="none" stroke="#ef4444" stroke-width="4" />
+            <circle cx="180" cy="144" r="7" fill="#facc15" />
+          </svg>
+        `
+      },
+      {
+        id: 2,
+        type: 'bad',
+        title: 'Arkadaşını itmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#fca5a5" opacity="0.5" />
+            <path d="M105 42 L115 54 M125 36 L128 52 M88 52 L102 60" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />
+            <!-- İten Çocuk (Kaşları Çatık) -->
+            <circle cx="115" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M86 82 Q115 52 144 82 Z" fill="#451a03" />
+            <path d="M102 78 L114 84 M128 78 L116 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="107" cy="89" r="3.8" fill="#1e293b" />
+            <circle cx="123" cy="89" r="3.8" fill="#1e293b" />
+            <path d="M106 105 Q115 96 124 105" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M88 188 L96 126 L136 126 L146 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path d="M134 134 L196 130" stroke="#fed7aa" stroke-width="13" stroke-linecap="round" />
+            <path d="M198 114 L208 130 L196 146" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />
+            <!-- İtilen ve Düşen Çocuk (Üzgün) -->
+            <g transform="rotate(18 245 145)">
+              <circle cx="245" cy="96" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M216 90 Q245 60 274 90 Z" fill="#78350f" />
+              <circle cx="236" cy="95" r="3.8" fill="#1e293b" />
+              <circle cx="254" cy="95" r="3.8" fill="#1e293b" />
+              <path d="M262 100 Q267 110 262 114 Q257 110 262 100 Z" fill="#38bdf8" />
+              <ellipse cx="245" cy="111" rx="7" ry="6" fill="#991b1b" />
+              <path d="M218 190 L226 132 L264 132 L272 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 3,
+        type: 'good',
+        title: 'Düşen arkadaşına yardım etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#dcfce7" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#86efac" opacity="0.7" />
+            <path d="M185 52 C185 52 167 39 167 27 C167 20 172 15 178 15 C182 15 184 18 185 20 C186 18 188 15 192 15 C198 15 203 20 203 27 C203 39 185 52 185 52 Z" fill="#f43f5e" />
+            <!-- El Uzatan Yardımsever Çocuk -->
+            <circle cx="112" cy="82" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M82 78 Q112 46 142 78 Z" fill="#7c2d12" />
+            <circle cx="103" cy="80" r="3.8" fill="#1e293b" />
+            <circle cx="121" cy="80" r="3.8" fill="#1e293b" />
+            <path d="M103 93 Q112 104 121 93" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M84 186 L92 120 L132 120 L140 186 Z" fill="#10b981" stroke="#065f46" stroke-width="3" />
+            <path d="M132 128 L188 144" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <!-- Yere Düşmüş Çocuk -->
+            <circle cx="248" cy="122" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M220 116 Q248 88 276 116 Z" fill="#1e293b" />
+            <circle cx="239" cy="121" r="3.5" fill="#1e293b" />
+            <circle cx="257" cy="121" r="3.5" fill="#1e293b" />
+            <path d="M240 135 Q248 130 256 135" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M222 192 L228 154 L268 154 L276 192 Z" fill="#f59e0b" stroke="#b45309" stroke-width="3" />
+            <path d="M192 186 L232 186" stroke="#3b82f6" stroke-width="14" stroke-linecap="round" />
+            <rect x="200" y="180" width="14" height="8" rx="2" fill="#fecdd3" stroke="#e11d48" stroke-width="1.5" />
+            <path d="M225 162 L188 144" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+            <circle cx="188" cy="144" r="9" fill="#fde047" opacity="0.85" />
+          </svg>
+        `
+      },
+      {
+        id: 4,
+        type: 'bad',
+        title: 'Arkadaşıyla alay etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fce7f3" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#f9a8d4" opacity="0.5" />
+            <!-- Parmakla Gösterip Alay Eden Çocuk -->
+            <circle cx="105" cy="92" r="32" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M74 86 Q105 54 136 86 Z" fill="#451a03" />
+            <path d="M88 86 L98 90 L88 94" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M122 86 L112 90 L122 94" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M92 104 Q105 110 118 104" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M98 106 L98 122 C98 128 112 128 112 122 L112 106 Z" fill="#f43f5e" stroke="#9f1239" stroke-width="2" />
+            <path d="M76 188 L84 128 L126 128 L134 188 Z" fill="#f97316" stroke="#c2410c" stroke-width="3" />
+            <path d="M126 142 L176 134" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <!-- Ağlayan Çocuk -->
+            <circle cx="258" cy="96" r="32" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M227 90 Q258 58 289 90 Z" fill="#7c2d12" />
+            <path d="M242 84 L252 80 M274 84 L264 80" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <circle cx="248" cy="94" r="3.8" fill="#1e293b" />
+            <circle cx="268" cy="94" r="3.8" fill="#1e293b" />
+            <path d="M276 102 Q282 114 276 120 Q270 114 276 102 Z" fill="#38bdf8" />
+            <path d="M246 114 Q258 102 270 114" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M230 188 L238 132 L278 132 L286 188 Z" fill="#6366f1" stroke="#3730a3" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 5,
+        type: 'good',
+        title: 'Sırasını beklemek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#e0f2fe" />
+            <rect x="0" y="182" width="360" height="38" fill="#bae6fd" />
+            <!-- Sağda Su Sebili / Çeşme -->
+            <rect x="282" y="72" width="44" height="110" rx="8" fill="#38bdf8" stroke="#0284c7" stroke-width="3" />
+            <rect x="292" y="42" width="24" height="32" rx="10" fill="#bae6fd" stroke="#0284c7" stroke-width="2.5" />
+            <path d="M282 112 H270 V122" fill="none" stroke="#0369a1" stroke-width="4" stroke-linecap="round" />
+            <path d="M270 126 Q267 134 270 138 Q273 134 270 126 Z" fill="#0ea5e9" />
+            <!-- 1. Çocuk -->
+            <circle cx="215" cy="95" r="22" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+            <path d="M193 90 Q215 68 237 90 Z" fill="#7c2d12" />
+            <circle cx="222" cy="93" r="3" fill="#1e293b" />
+            <path d="M216 103 Q223 109 229 103" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="197" y="120" width="36" height="62" rx="10" fill="#22c55e" stroke="#15803d" stroke-width="2.5" />
+            <!-- 2. Çocuk -->
+            <circle cx="145" cy="95" r="22" fill="#fde68a" stroke="#92400e" stroke-width="2.5" />
+            <path d="M123 90 Q145 68 167 90 Z" fill="#1e293b" />
+            <circle cx="152" cy="93" r="3" fill="#1e293b" />
+            <path d="M146 103 Q153 109 159 103" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="127" y="120" width="36" height="62" rx="10" fill="#ec4899" stroke="#9d174d" stroke-width="2.5" />
+            <!-- 3. Çocuk -->
+            <circle cx="75" cy="95" r="22" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+            <path d="M53 90 Q75 68 97 90 Z" fill="#92400e" />
+            <circle cx="82" cy="93" r="3" fill="#1e293b" />
+            <path d="M76 103 Q83 109 89 103" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="57" y="120" width="36" height="62" rx="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2.5" />
+            <!-- Üstte Yeşil Onay İşareti -->
+            <circle cx="145" cy="34" r="18" fill="#22c55e" />
+            <path d="M136 34 L143 41 L156 27" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        `
+      },
+      {
+        id: 6,
+        type: 'bad',
+        title: 'Sıranın önüne geçmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <rect x="0" y="182" width="360" height="38" fill="#fecaca" />
+            <circle cx="225" cy="36" r="18" fill="#dc2626" />
+            <text x="225" y="44" text-anchor="middle" fill="#ffffff" font-size="24" font-weight="900">!</text>
+            <!-- Arkada Bekleyen Şaşkın Çocuk -->
+            <circle cx="85" cy="96" r="24" fill="#fde68a" stroke="#92400e" stroke-width="2.5" />
+            <path d="M61 90 Q85 66 109 90 Z" fill="#1e293b" />
+            <circle cx="92" cy="94" r="3.2" fill="#1e293b" />
+            <circle cx="91" cy="106" r="4" fill="#1e293b" />
+            <rect x="65" y="122" width="40" height="60" rx="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2.5" />
+            <!-- Kenara İtilip Üzülen Çocuk -->
+            <circle cx="155" cy="98" r="24" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+            <path d="M131 92 Q155 68 179 92 Z" fill="#7c2d12" />
+            <circle cx="162" cy="96" r="3.2" fill="#1e293b" />
+            <path d="M154 110 Q162 104 168 110" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="135" y="124" width="40" height="58" rx="10" fill="#ec4899" stroke="#9d174d" stroke-width="2.5" />
+            <!-- En Öne Geçen Kaşları Çatık Çocuk -->
+            <circle cx="242" cy="90" r="27" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M215 84 Q242 56 269 84 Z" fill="#451a03" />
+            <path d="M234 80 L248 86" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="248" cy="90" r="3.5" fill="#1e293b" />
+            <path d="M238 104 Q248 98 255 104" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <rect x="218" y="120" width="48" height="62" rx="12" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path d="M218 142 L182 142" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <path d="M275 112 L298 112 M288 104 L298 112 L288 120" fill="none" stroke="#dc2626" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+          </svg>
+        `
+      },
+      {
+        id: 7,
+        type: 'good',
+        title: 'Üzgün arkadaşını teselli etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#f0fdf4" />
+            <ellipse cx="180" cy="198" rx="150" ry="20" fill="#bbf7d0" opacity="0.7" />
+            <!-- Üstte Sevgi Kalbi -->
+            <path d="M180 54 C180 54 156 38 156 24 C156 16 162 11 170 11 C175 11 178 14 180 17 C182 14 185 11 190 11 C198 11 204 16 204 24 C204 38 180 54 180 54 Z" fill="#f43f5e" />
+            <!-- Solda Üzgün Duran Çocuk -->
+            <circle cx="132" cy="94" r="31" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M101 88 Q132 56 163 88 Z" fill="#7c2d12" />
+            <circle cx="123" cy="93" r="3.8" fill="#1e293b" />
+            <circle cx="141" cy="93" r="3.8" fill="#1e293b" />
+            <path d="M115 99 Q111 109 115 113 Q119 109 115 99 Z" fill="#38bdf8" />
+            <path d="M123 108 Q132 102 141 108" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M104 188 L112 128 L152 128 L160 188 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3" />
+            <!-- Sağda Şefkatle Sarılan / Omzuna Dokunan Arkadaşı -->
+            <circle cx="226" cy="90" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M195 84 Q226 52 257 84 Z" fill="#1e293b" />
+            <circle cx="216" cy="88" r="3.8" fill="#1e293b" />
+            <circle cx="234" cy="88" r="3.8" fill="#1e293b" />
+            <path d="M216 101 Q225 112 234 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M198 188 L206 126 L246 126 L254 188 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <!-- Sarılan Şefkatli Kol -->
+            <path d="M206 136 Q172 132 146 144" fill="none" stroke="#fed7aa" stroke-width="13" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 8,
+        type: 'bad',
+        title: 'Eşyasını izinsiz çekip almak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#ffedd5" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#fdba74" opacity="0.5" />
+            <!-- Ağlayan Çocuk (Sol) -->
+            <circle cx="92" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M62 86 Q92 56 122 86 Z" fill="#7c2d12" />
+            <path d="M78 88 L88 92 M106 88 L96 92" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M76 98 Q71 110 76 115 Q81 110 76 98 Z" fill="#38bdf8" />
+            <path d="M108 98 Q113 110 108 115 Q103 110 108 98 Z" fill="#38bdf8" />
+            <path d="M82 108 Q92 98 102 108" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M64 188 L72 128 L112 128 L120 188 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3" />
+            <path d="M112 142 L156 142" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+            <!-- Eşyayı Sertçe Çeken Çocuk (Sağ) -->
+            <circle cx="268" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M238 82 Q268 52 298 82 Z" fill="#1e293b" />
+            <path d="M254 78 L266 84 M282 78 L270 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="260" cy="89" r="3.8" fill="#1e293b" />
+            <circle cx="276" cy="89" r="3.8" fill="#1e293b" />
+            <path d="M258 105 Q268 97 278 105" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M240 188 L248 126 L288 126 L296 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path d="M246 140 L196 140" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <!-- Ortada Çekiştirilen Renkli Defter / Kitap -->
+            <rect x="155" y="122" width="44" height="36" rx="4" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2.5" />
+            <line x1="177" y1="122" x2="177" y2="158" stroke="#93c5fd" stroke-width="2.5" />
+            <path d="M206 125 L220 125 M208 152 L222 152" stroke="#dc2626" stroke-width="3.5" stroke-linecap="round" />
+          </svg>
+        `
+      }
+    ];
+
+    /**
+     * 2. OYUN KONTROLCÜSÜ (Tamamen Sessiz, Kesintisiz Sürükle-Bırak ve Dokunma Desteği)
+     */
+    const GameApp = (() => {
+      let deck = [];
+      let currentIndex = 0;
+      let isCardSelected = false;
+      let isAnimating = false;
+
+      // Pointer Sürükleme Durumu
+      let activePointerId = null;
+      let startX = 0;
+      let startY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      let lastPointerX = 0;
+      let lastPointerY = 0;
+
+      // DOM Elemanları
+      const startScreen = document.getElementById('start-screen');
+      const victoryScreen = document.getElementById('victory-screen');
+      const starsContainer = document.getElementById('stars-container');
+      const cardEl = document.getElementById('behavior-card');
+      const cardIllusEl = document.getElementById('card-illustration');
+      const cardLabelEl = document.getElementById('card-label');
+      const boxGood = document.getElementById('box-good');
+      const boxBad = document.getElementById('box-bad');
+      const correctBadge = document.getElementById('feedback-badge-correct');
+      const retryBadge = document.getElementById('feedback-badge-retry');
+      const effectsLayer = document.getElementById('effects-layer');
+
+      // Fisher-Yates Karıştırma
+      function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      // Üstteki 8 Yıldızlı İlerleme Çubuğunu Güncelle
+      function renderStars() {
+        starsContainer.innerHTML = '';
+        for (let i = 0; i < SCENARIOS.length; i++) {
+          const isFilled = i < currentIndex;
+          const starWrapper = document.createElement('div');
+          starWrapper.className = `w-7 h-7 sm:w-9 sm:h-9 flex items-center justify-center rounded-full transition-all ${
+            isFilled ? 'bg-amber-100 star-filled shadow-xs' : 'bg-slate-100'
+          }`;
+
+          starWrapper.innerHTML = isFilled
+            ? `<svg class="w-6 h-6 sm:w-7 sm:h-7 text-amber-400 drop-shadow" viewBox="0 0 24 24" fill="currentColor" stroke="#d97706" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+               </svg>`
+            : `<svg class="w-5 h-5 sm:w-6 sm:h-6 text-slate-300" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+               </svg>`;
+
+          starsContainer.appendChild(starWrapper);
+        }
+      }
+
+      // Mevcut Kartı Ekrana Getir
+      function renderCurrentCard() {
+        isCardSelected = false;
+        isAnimating = false;
+        activePointerId = null;
+
+        cardEl.classList.remove('card-selected', 'card-shake', 'border-orange-400', 'ring-4', 'ring-orange-200', 'opacity-0');
+        retryBadge.classList.add('hidden');
+        resetCardPosition(false);
+
+        const item = deck[currentIndex];
+        if (!item) return;
+        cardIllusEl.innerHTML = item.svg;
+        cardLabelEl.textContent = item.title;
+      }
+
+      // Kart Pozisyonunu Merkeze Sıfırla
+      function resetCardPosition(animate = true) {
+        currentX = 0;
+        currentY = 0;
+        cardEl.style.transition = animate
+          ? 'transform 0.36s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          : 'none';
+        cardEl.style.transform = 'translate3d(0px, 0px, 0px) scale(1) rotate(0deg)';
+        clearBoxHighlights();
+      }
+
+      function clearBoxHighlights() {
+        boxGood.classList.remove('hover-green');
+        boxBad.classList.remove('hover-red');
+      }
+
+      // Hem İşaretçi Konumu Hem Kart Merkezine Göre Kutu Çarpışma Kontrolü (25px toleranslı)
+      function getHoveredBox(pointerX, pointerY) {
+        const cardRect = cardEl.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const cardCenterY = cardRect.top + cardRect.height / 2;
+        const pad = 25;
+
+        function isInside(rect, x, y) {
+          return (
+            x >= rect.left - pad &&
+            x <= rect.right + pad &&
+            y >= rect.top - pad &&
+            y <= rect.bottom + pad
+          );
+        }
+
+        const goodRect = boxGood.getBoundingClientRect();
+        const badRect = boxBad.getBoundingClientRect();
+
+        if (isInside(goodRect, pointerX, pointerY) || isInside(goodRect, cardCenterX, cardCenterY)) {
+          return 'good';
+        }
+        if (isInside(badRect, pointerX, pointerY) || isInside(badRect, cardCenterX, cardCenterY)) {
+          return 'bad';
+        }
+        return null;
+      }
+
+      // Kutudan Renkli Yıldızlar Fışkırtma Efekti
+      function spawnStarBurst(targetBox) {
+        const rect = targetBox.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 3;
+        const emojis = ['⭐', '🌟', '✨', '💖', '💚', '☀️'];
+
+        for (let i = 0; i < 14; i++) {
+          const el = document.createElement('div');
+          el.className = 'burst-particle';
+          el.textContent = emojis[i % emojis.length];
+          el.style.left = `${centerX}px`;
+          el.style.top = `${centerY}px`;
+          effectsLayer.appendChild(el);
+
+          const angle = (Math.PI * 2 * i) / 14 + (Math.random() * 0.4 - 0.2);
+          const dist = 70 + Math.random() * 110;
+          const tx = Math.cos(angle) * dist;
+          const ty = Math.sin(angle) * dist - 40;
+
+          requestAnimationFrame(() => {
+            el.style.transform = `translate(${tx}px, ${ty}px) scale(${0.9 + Math.random() * 0.6}) rotate(${Math.random() * 360}deg)`;
+            el.style.opacity = '0';
+          });
+
+          setTimeout(() => el.remove(), 900);
+        }
+      }
+
+      // Cevabı Değerlendir (Kesinlikle takılmayan, zamanlayıcı korumalı akış)
+      function handleAnswer(chosenType) {
+        if (isAnimating) return;
+        const currentItem = deck[currentIndex];
+        if (!currentItem) return;
+
+        const targetBox = chosenType === 'good' ? boxGood : boxBad;
+        clearBoxHighlights();
+        isCardSelected = false;
+        cardEl.classList.remove('card-selected');
+
+        if (chosenType === currentItem.type) {
+          // DOĞRU KUTU!
+          isAnimating = true;
+
+          targetBox.classList.add('box-celebrate');
+          setTimeout(() => targetBox.classList.remove('box-celebrate'), 650);
+
+          spawnStarBurst(targetBox);
+
+          // Büyük Yeşil Onay Rozetini Kısa Süreliğine Göster
+          correctBadge.classList.remove('hidden');
+          setTimeout(() => correctBadge.classList.add('hidden'), 650);
+
+          // Kartı Kutu İçine Uçurarak Küçült
+          const boxRect = targetBox.getBoundingClientRect();
+          const cardRect = cardEl.getBoundingClientRect();
+          const dx = (boxRect.left + boxRect.width / 2) - (cardRect.left + cardRect.width / 2);
+          const dy = (boxRect.top + boxRect.height / 2) - (cardRect.top + cardRect.height / 2);
+
+          cardEl.style.transition = 'transform 0.42s ease-in, opacity 0.38s ease-in';
+          cardEl.style.transform = `translate3d(${currentX + dx}px, ${currentY + dy}px, 0) scale(0.15) rotate(${chosenType === 'good' ? -14 : 14}deg)`;
+          cardEl.classList.add('opacity-0');
+
+          // İlerlemeyi Artır ve Yıldızı Altın Yap
+          currentIndex++;
+          renderStars();
+
+          // 850ms Sonra Kesin Olarak Bir Sonraki Karta veya Zafer Ekranına Geç
+          setTimeout(() => {
+            isAnimating = false;
+            if (currentIndex >= deck.length) {
+              showVictoryScreen();
+            } else {
+              renderCurrentCard();
+            }
+          }, 850);
+        } else {
+          // YANLIŞ KUTU - Yumuşak Yatay Titreme, Turuncu Çerçeve ve Tekrar Dene Oku
+          isAnimating = true;
+          resetCardPosition(true);
+
+          cardEl.classList.add('border-orange-400', 'ring-4', 'ring-orange-200');
+          retryBadge.classList.remove('hidden');
+
+          cardEl.classList.remove('card-shake');
+          void cardEl.offsetWidth;
+          cardEl.classList.add('card-shake');
+
+          setTimeout(() => {
+            cardEl.classList.remove('card-shake', 'border-orange-400', 'ring-4', 'ring-orange-200');
+            retryBadge.classList.add('hidden');
+            isAnimating = false;
+          }, 700);
+        }
+      }
+
+      // Pointer Events ile Sürükle-Bırak ve Akıllı Tahta Dokunma Etkileşimleri
+      function setupInteractions() {
+        cardEl.addEventListener('pointerdown', (e) => {
+          if (isAnimating || activePointerId !== null) return;
+
+          activePointerId = e.pointerId;
+          startX = e.clientX - currentX;
+          startY = e.clientY - currentY;
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+
+          cardEl.classList.add('dragging');
+          cardEl.style.transition = 'none';
+
+          try {
+            cardEl.setPointerCapture(e.pointerId);
+          } catch (_) {
+            // Iframe veya bazı dokunmatik ekranlarda yakalama hatasını yoksay
+          }
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          if (activePointerId === null || e.pointerId !== activePointerId || isAnimating) return;
+
+          currentX = e.clientX - startX;
+          currentY = e.clientY - startY;
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+
+          const rotateDeg = Math.max(-14, Math.min(14, currentX * 0.045));
+          cardEl.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(1.04) rotate(${rotateDeg}deg)`;
+
+          const hovered = getHoveredBox(lastPointerX, lastPointerY);
+          clearBoxHighlights();
+          if (hovered === 'good') boxGood.classList.add('hover-green');
+          if (hovered === 'bad') boxBad.classList.add('hover-red');
+        });
+
+        function finishPointerDrag(e) {
+          if (activePointerId === null || e.pointerId !== activePointerId) return;
+
+          const pid = activePointerId;
+          activePointerId = null;
+          cardEl.classList.remove('dragging');
+
+          try {
+            if (cardEl.hasPointerCapture(pid)) {
+              cardEl.releasePointerCapture(pid);
+            }
+          } catch (_) {}
+
+          if (isAnimating) return;
+
+          const moveDistance = Math.hypot(currentX, currentY);
+          const hovered = getHoveredBox(lastPointerX, lastPointerY);
+
+          if (hovered) {
+            handleAnswer(hovered);
+          } else if (moveDistance < 12) {
+            // Sürükleme değil, karta dokunma (seçim vurgusu)
+            resetCardPosition(true);
+            isCardSelected = !isCardSelected;
+            cardEl.classList.toggle('card-selected', isCardSelected);
+          } else {
+            // Boş alana bırakıldıysa merkeze yaylanarak geri dön
+            resetCardPosition(true);
+          }
+        }
+
+        window.addEventListener('pointerup', finishPointerDrag);
+        window.addEventListener('pointercancel', finishPointerDrag);
+
+        // Kutulara Doğrudan Dokunma / Tıklama (Akıllı tahta ve tablet kolaylığı)
+        boxGood.addEventListener('click', () => {
+          if (!isAnimating) handleAnswer('good');
+        });
+
+        boxBad.addEventListener('click', () => {
+          if (!isAnimating) handleAnswer('bad');
+        });
+
+        // Üstteki Yeniden Başlat Butonu
+        document.getElementById('btn-restart-top').addEventListener('click', () => {
+          startNewGame();
+        });
+      }
+
+      // Zafer Ekranı ve Renkli Konfeti Animasyonu
+      function showVictoryScreen() {
+        victoryScreen.classList.remove('hidden');
+        launchConfetti();
+      }
+
+      function launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        canvas.classList.remove('hidden');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const colors = ['#facc15', '#22c55e', '#3b82f6', '#f43f5e', '#a855f7', '#fb923c'];
+        const pieces = Array.from({ length: 120 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: 10 + Math.random() * 10,
+          h: 6 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vy: 2.5 + Math.random() * 4,
+          vx: -2 + Math.random() * 4,
+          rot: Math.random() * 360,
+          vRot: -6 + Math.random() * 12
+        }));
+
+        let animId;
+        function render() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let active = false;
+
+          pieces.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vRot;
+            if (p.y < canvas.height + 30) active = true;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rot * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          });
+
+          if (active && !victoryScreen.classList.contains('hidden')) {
+            animId = requestAnimationFrame(render);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.classList.add('hidden');
+            cancelAnimationFrame(animId);
+          }
+        }
+        render();
+      }
+
+      // Yeni Oyun Başlat
+      function startNewGame() {
+        isAnimating = false;
+        activePointerId = null;
+        victoryScreen.classList.add('hidden');
+        startScreen.classList.add('hidden');
+        correctBadge.classList.add('hidden');
+        retryBadge.classList.add('hidden');
+
+        deck = shuffleArray(SCENARIOS);
+        currentIndex = 0;
+        renderStars();
+        renderCurrentCard();
+      }
+
+      function init() {
+        renderStars();
+        setupInteractions();
+
+        document.getElementById('btn-start-game').addEventListener('click', () => {
+          startNewGame();
+        });
+
+        document.getElementById('btn-play-again').addEventListener('click', () => {
+          startNewGame();
+        });
+      }
+
+      return { init };
+    })();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      GameApp.init();
+    });
+  </script>
+</body>
+</html>

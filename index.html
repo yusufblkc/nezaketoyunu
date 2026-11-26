@@ -1,0 +1,2192 @@
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no" />
+  <title>Nezaket mi, Kabalık mı?</title>
+  <!-- Çocuk dostu, yuvarlak hatlı ve Türkçe karakter destekli fontlar -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&family=Nunito:wght@700;800;900&display=swap" rel="stylesheet" />
+  <script src="https://cdn.tailwindcss.com"></script>
+
+  <style>
+    :root {
+      --font-display: 'Fredoka', 'Nunito', sans-serif;
+      --font-body: 'Nunito', sans-serif;
+    }
+
+    * {
+      box-sizing: border-box;
+      -webkit-tap-highlight-color: transparent;
+      user-select: none;
+      -webkit-user-select: none;
+    }
+
+    html, body {
+      margin: 0;
+      padding: 0;
+      width: 100%;
+      height: 100dvh;
+      overflow: hidden;
+      font-family: var(--font-display);
+      background: linear-gradient(180deg, #dbeafe 0%, #eff6ff 50%, #f0fdf4 100%);
+      touch-action: none;
+    }
+
+    /* =====================================================================
+       GENEL ARAYÜZ ANİMASYONLARI
+       ===================================================================== */
+    @keyframes floatSoft {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(-4px); }
+    }
+
+    @keyframes starPop {
+      0% { transform: scale(0.3) rotate(-25deg); }
+      65% { transform: scale(1.3) rotate(10deg); }
+      100% { transform: scale(1) rotate(0deg); }
+    }
+
+    @keyframes boxCelebrate {
+      0%, 100% { transform: scale(1); }
+      35% { transform: scale(1.06) rotate(-1.5deg); }
+      70% { transform: scale(1.04) rotate(1.5deg); }
+    }
+
+    @keyframes gentleShake {
+      0%, 100% { transform: translate3d(0, 0, 0); }
+      20% { transform: translate3d(-14px, 0, 0) rotate(-3deg); }
+      40% { transform: translate3d(14px, 0, 0) rotate(3deg); }
+      60% { transform: translate3d(-10px, 0, 0) rotate(-2deg); }
+      80% { transform: translate3d(10px, 0, 0) rotate(2deg); }
+    }
+
+    @keyframes badgePop {
+      0% { transform: scale(0.4); opacity: 0; }
+      55% { transform: scale(1.12); opacity: 1; }
+      100% { transform: scale(1); opacity: 1; }
+    }
+
+    @keyframes playBtnPulse {
+      0%, 100% { transform: scale(1); box-shadow: 0 10px 0 #15803d, 0 18px 30px rgba(22, 163, 74, 0.38); }
+      50% { transform: scale(1.035); box-shadow: 0 12px 0 #15803d, 0 22px 38px rgba(22, 163, 74, 0.55); }
+    }
+
+    /* =====================================================================
+       40 HAREKETLİ SAHNE (GIF BENZERİ SÜREKLİ SVG DÖNGÜLERİ)
+       ===================================================================== */
+    @keyframes gifCutLine {
+      0%, 100% { transform: translate(0px, 0px) rotate(0deg); }
+      45% { transform: translate(-44px, -6px) rotate(-6deg); }
+      70% { transform: translate(-36px, 0px) rotate(-3deg); }
+    }
+
+    @keyframes gifLineRecoil {
+      0%, 30%, 100% { transform: translateX(0px) rotate(0deg); }
+      50%, 75% { transform: translateX(12px) rotate(5deg); }
+    }
+
+    @keyframes gifShove {
+      0%, 100% { transform: translateX(0px); }
+      45% { transform: translateX(24px); }
+    }
+
+    @keyframes gifFallBack {
+      0%, 25%, 100% { transform: rotate(0deg) translateX(0px); }
+      55%, 80% { transform: rotate(18deg) translateX(12px); }
+    }
+
+    @keyframes gifOffer {
+      0%, 100% { transform: translateX(-8px) translateY(0px); }
+      50% { transform: translateX(14px) translateY(-4px); }
+    }
+
+    @keyframes gifSnatch {
+      0%, 100% { transform: translateX(-16px) rotate(-4deg); }
+      50% { transform: translateX(22px) rotate(6deg); }
+    }
+
+    @keyframes gifPointLaugh {
+      0%, 100% { transform: translate(0px, 0px); }
+      25% { transform: translate(8px, -5px); }
+      50% { transform: translate(2px, 0px); }
+      75% { transform: translate(10px, -6px); }
+    }
+
+    @keyframes gifWave {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(-20deg); }
+    }
+
+    @keyframes gifWalkIn {
+      0%, 100% { transform: translateX(10px); }
+      50% { transform: translateX(-14px); }
+    }
+
+    @keyframes gifLiftUp {
+      0%, 100% { transform: translateY(4px); }
+      50% { transform: translateY(-8px); }
+    }
+
+    @keyframes gifShoutWave {
+      0%, 100% { transform: scale(0.85); opacity: 0.45; }
+      50% { transform: scale(1.15); opacity: 1; }
+    }
+
+    @keyframes gifScribble {
+      0%, 100% { transform: translate(-10px, -4px); }
+      33% { transform: translate(12px, 4px); }
+      66% { transform: translate(-6px, 6px); }
+    }
+
+    @keyframes gifDoorSwing {
+      0%, 100% { transform: scaleX(1); }
+      50% { transform: scaleX(0.45); }
+    }
+
+    @keyframes gifTossTrash {
+      0% { transform: translate(0px, 0px) scale(1); opacity: 1; }
+      65% { transform: translate(34px, 24px) scale(0.95); opacity: 1; }
+      85%, 100% { transform: translate(38px, 42px) scale(0.75); opacity: 0; }
+    }
+
+    @keyframes gifDropTrash {
+      0% { transform: translateY(-14px); opacity: 1; }
+      70%, 100% { transform: translateY(34px); opacity: 1; }
+    }
+
+    @keyframes gifKick {
+      0%, 100% { transform: rotate(0deg); }
+      45% { transform: rotate(-28deg); }
+    }
+
+    @keyframes gifBlockFly {
+      0%, 25% { transform: translate(0px, 0px) rotate(0deg); }
+      65%, 90% { transform: translate(24px, -28px) rotate(40deg); }
+      100% { transform: translate(0px, 0px) rotate(0deg); }
+    }
+
+    @keyframes gifSwing {
+      0%, 100% { transform: rotate(-10deg); }
+      50% { transform: rotate(10deg); }
+    }
+
+    @keyframes gifRaiseHand {
+      0%, 100% { transform: translateY(5px) rotate(4deg); }
+      50% { transform: translateY(-8px) rotate(-5deg); }
+    }
+
+    @keyframes gifClap {
+      0%, 100% { transform: scale(0.88); }
+      50% { transform: scale(1.2); }
+    }
+
+    @keyframes gifTear {
+      0% { transform: translateY(0px); opacity: 1; }
+      80% { transform: translateY(15px); opacity: 0.2; }
+      100% { transform: translateY(0px); opacity: 0; }
+    }
+
+    @keyframes gifHeart {
+      0%, 100% { transform: translateY(0px) scale(0.95); }
+      50% { transform: translateY(-7px) scale(1.1); }
+    }
+
+    @keyframes gifYankBag {
+      0%, 100% { transform: translateX(0px); }
+      50% { transform: translateX(18px); }
+    }
+
+    @keyframes gifRunDash {
+      0%, 100% { transform: translateX(-18px); }
+      50% { transform: translateX(18px); }
+    }
+
+    @keyframes gifTongue {
+      0%, 100% { transform: rotate(-4deg) translateY(0px); }
+      50% { transform: rotate(4deg) translateY(3px); }
+    }
+
+    @keyframes gifNod {
+      0%, 100% { transform: translateY(0px); }
+      50% { transform: translateY(4px); }
+    }
+
+    .anim-cut-line { animation: gifCutLine 1.5s ease-in-out infinite; }
+    .anim-line-recoil { animation: gifLineRecoil 1.5s ease-in-out infinite; }
+    .anim-shove { animation: gifShove 1.3s ease-in-out infinite; }
+    .anim-fall-back { animation: gifFallBack 1.3s ease-in-out infinite; }
+    .anim-offer { animation: gifOffer 1.5s ease-in-out infinite; }
+    .anim-snatch { animation: gifSnatch 1.3s ease-in-out infinite; }
+    .anim-point-laugh { animation: gifPointLaugh 1.1s ease-in-out infinite; }
+    .anim-wave { transform-origin: 124px 134px; animation: gifWave 1.2s ease-in-out infinite; }
+    .anim-walk-in { animation: gifWalkIn 1.8s ease-in-out infinite; }
+    .anim-lift-up { animation: gifLiftUp 1.5s ease-in-out infinite; }
+    .anim-shout-wave { transform-box: fill-box; transform-origin: center; animation: gifShoutWave 0.9s ease-in-out infinite; }
+    .anim-scribble { animation: gifScribble 0.85s ease-in-out infinite; }
+    .anim-door-swing { transform-box: fill-box; transform-origin: left center; animation: gifDoorSwing 1.4s ease-in-out infinite; }
+    .anim-toss-trash { animation: gifTossTrash 1.6s ease-in-out infinite; }
+    .anim-drop-trash { animation: gifDropTrash 1.5s ease-in-out infinite; }
+    .anim-kick { transform-box: fill-box; transform-origin: top center; animation: gifKick 1.3s ease-in-out infinite; }
+    .anim-block-fly { animation: gifBlockFly 1.3s ease-in-out infinite; }
+    .anim-swing { transform-origin: 238px 22px; animation: gifSwing 1.8s ease-in-out infinite; }
+    .anim-raise-hand { transform-origin: 206px 132px; animation: gifRaiseHand 1.3s ease-in-out infinite; }
+    .anim-clap { transform-box: fill-box; transform-origin: center; animation: gifClap 0.75s ease-in-out infinite; }
+    .anim-tear { animation: gifTear 1.3s ease-in infinite; }
+    .anim-heart { transform-box: fill-box; transform-origin: center; animation: gifHeart 1.4s ease-in-out infinite; }
+    .anim-yank-bag { animation: gifYankBag 1.2s ease-in-out infinite; }
+    .anim-run-dash { animation: gifRunDash 1.4s ease-in-out infinite; }
+    .anim-tongue { transform-box: fill-box; transform-origin: center; animation: gifTongue 1.1s ease-in-out infinite; }
+    .anim-nod { animation: gifNod 1.4s ease-in-out infinite; }
+
+    /* =====================================================================
+       KART VE HEDEF KUTU ETKİLEŞİM STİLLERİ
+       ===================================================================== */
+    .card-idle {
+      animation: floatSoft 3.2s ease-in-out infinite;
+    }
+
+    .card-selected {
+      box-shadow: 0 0 0 6px #facc15, 0 20px 38px rgba(15, 23, 42, 0.22) !important;
+    }
+
+    .card-shake {
+      animation: gentleShake 0.55s ease-in-out !important;
+    }
+
+    .badge-pop {
+      animation: badgePop 0.35s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .star-filled {
+      animation: starPop 0.45s cubic-bezier(0.34, 1.56, 0.64, 1) forwards;
+    }
+
+    .box-celebrate {
+      animation: boxCelebrate 0.6s ease-in-out;
+    }
+
+    .play-btn-hero {
+      animation: playBtnPulse 2s ease-in-out infinite;
+    }
+
+    .play-btn-hero:active {
+      transform: translateY(5px) scale(0.98) !important;
+    }
+
+    .target-box {
+      transition: transform 0.2s cubic-bezier(0.34, 1.56, 0.64, 1), box-shadow 0.2s ease, filter 0.2s ease;
+    }
+
+    .target-box.hover-green {
+      transform: scale(1.05) translateY(-4px);
+      box-shadow: 0 0 0 7px #fde047, 0 20px 38px rgba(22, 163, 74, 0.55);
+      filter: brightness(1.06);
+    }
+
+    .target-box.hover-red {
+      transform: scale(1.05) translateY(-4px);
+      box-shadow: 0 0 0 7px #fca5a5, 0 20px 38px rgba(220, 38, 38, 0.55);
+      filter: brightness(1.06);
+    }
+
+    #behavior-card {
+      touch-action: none;
+      cursor: grab;
+      will-change: transform;
+    }
+
+    #behavior-card.dragging {
+      cursor: grabbing;
+      animation: none !important;
+      z-index: 45;
+      box-shadow: 0 26px 48px rgba(15, 23, 42, 0.28);
+    }
+
+    #effects-layer {
+      pointer-events: none;
+      position: fixed;
+      inset: 0;
+      z-index: 60;
+      overflow: hidden;
+    }
+
+    .burst-particle {
+      position: absolute;
+      font-size: 2rem;
+      pointer-events: none;
+      transition: transform 0.8s cubic-bezier(0.16, 1, 0.3, 1), opacity 0.8s ease-out;
+    }
+  </style>
+</head>
+<body class="relative w-full h-[100dvh] select-none">
+
+  <!-- YUMUŞAK SINIF DOSTU ARKA PLAN DEKORASYONU -->
+  <div class="fixed inset-0 pointer-events-none overflow-hidden z-0" aria-hidden="true">
+    <div class="absolute -top-24 -left-24 w-72 h-72 rounded-full bg-sky-200/45 blur-2xl"></div>
+    <div class="absolute -top-20 -right-20 w-72 h-72 rounded-full bg-emerald-200/45 blur-2xl"></div>
+    <div class="absolute bottom-0 inset-x-0 h-14 bg-gradient-to-t from-emerald-200/50 to-transparent"></div>
+  </div>
+
+  <!-- EFEKTLER VE KONFETİ KATMANI -->
+  <div id="effects-layer"></div>
+  <canvas id="confetti-canvas" class="fixed inset-0 pointer-events-none z-50 hidden"></canvas>
+
+  <!-- =======================================================================
+       ANA SİMETRİK OYUN DÜZENİ (Ortalanmış, Katmanlar Çakışmaz)
+       ======================================================================= -->
+  <div class="relative z-10 w-full max-w-5xl mx-auto h-[100dvh] flex flex-col items-center justify-between px-3 sm:px-6 py-2.5 sm:py-4">
+
+    <!-- 1. ÜST ÇUBUK: BAŞLIK + 8 YILDIZLI İLERLEME + İPUCU & YENİDEN BAŞLAT -->
+    <header class="w-full bg-white/90 backdrop-blur-md rounded-2xl sm:rounded-3xl px-3 sm:px-5 py-2 sm:py-2.5 shadow-sm border-2 border-sky-200 flex flex-wrap lg:flex-nowrap items-center justify-between gap-2 shrink-0 relative z-30">
+      <!-- Sol: Oyun Başlığı ve Tur/Soru Göstergesi -->
+      <div class="flex items-center gap-2 shrink-0">
+        <span class="text-xl sm:text-2xl leading-none">😊</span>
+        <span class="font-black text-sky-950 text-sm sm:text-lg tracking-tight">Nezaket mi, Kabalık mı?</span>
+        <span id="round-indicator" class="bg-sky-100 text-sky-800 border border-sky-300 font-extrabold text-xs px-2.5 py-0.5 rounded-full">
+          Tur 1/5 • 1/8
+        </span>
+      </div>
+
+      <!-- Orta: 8 Yıldızlı İlerleme Göstergesi -->
+      <div id="stars-container" class="order-3 lg:order-2 w-full lg:w-auto flex items-center justify-center gap-1 sm:gap-1.5 bg-amber-50/90 px-3 py-1 rounded-full border border-amber-200">
+        <!-- JS ile 8 yıldız yuvası doldurulur -->
+      </div>
+
+      <!-- Sağ: Öğretmen İpucu Aç/Kapat ve Yeniden Başlat Butonu -->
+      <div class="order-2 lg:order-3 flex items-center gap-1.5 sm:gap-2 shrink-0">
+        <button id="btn-toggle-hint" type="button" title="Kart altındaki öğretmen açıklamasını göster/gizle"
+          class="px-2.5 py-1.5 bg-slate-100 hover:bg-slate-200 active:scale-95 text-slate-700 font-bold text-xs rounded-full border border-slate-300 transition cursor-pointer">
+          İpucu: Açık
+        </button>
+
+        <button id="btn-restart-top" type="button" title="Tüm 40 soruyu sıfırla ve baştan başla"
+          class="px-3 py-1.5 bg-sky-600 hover:bg-sky-500 active:scale-95 text-white font-extrabold text-xs sm:text-sm rounded-full shadow-xs transition flex items-center gap-1.5 cursor-pointer">
+          <svg class="w-4 h-4" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round">
+            <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+            <path d="M3 3v5h5"></path>
+          </svg>
+          <span>Yeniden Başlat</span>
+        </button>
+      </div>
+    </header>
+
+    <!-- 2. ORTA SAHNE: ORTALANMIŞ HAREKETLİ DAVRANIŞ KARTI -->
+    <main class="flex-1 w-full flex items-center justify-center min-h-0 py-2 relative z-20">
+      <!-- Doğru Cevap Onay Rozeti -->
+      <div id="feedback-badge-correct" class="hidden fixed inset-0 z-50 pointer-events-none flex items-center justify-center">
+        <div class="badge-pop w-28 h-28 sm:w-36 sm:h-36 rounded-full bg-emerald-500 border-8 border-white shadow-2xl flex items-center justify-center">
+          <svg class="w-16 h-16 sm:w-20 sm:h-20 text-white" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="4" stroke-linecap="round" stroke-linejoin="round">
+            <polyline points="20 6 9 17 4 12"></polyline>
+          </svg>
+        </div>
+      </div>
+
+      <!-- Ortalanmış Kart Çerçevesi -->
+      <div class="w-full max-w-[360px] sm:max-w-[440px] flex items-center justify-center">
+        <div id="behavior-card"
+          class="card-idle relative w-full bg-white rounded-[2rem] p-2.5 sm:p-3.5 shadow-xl border-4 border-sky-300 flex flex-col items-center justify-between transition-colors">
+
+          <!-- Yanlış Kutu Seçildiğinde Çıkan Tekrar Dene Rozeti -->
+          <div id="feedback-badge-retry" class="hidden absolute -top-4 -right-4 z-30 w-12 h-12 sm:w-14 sm:h-14 rounded-full bg-orange-500 border-4 border-white shadow-lg flex items-center justify-center text-white badge-pop pointer-events-none">
+            <svg class="w-7 h-7 sm:w-8 sm:h-8" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="3" stroke-linecap="round" stroke-linejoin="round">
+              <path d="M9 14 4 9l5-5"></path>
+              <path d="M4 9h10.5a5.5 5.5 0 0 1 5.5 5.5a5.5 5.5 0 0 1-5.5 5.5H11"></path>
+            </svg>
+          </div>
+
+          <!-- Hareketli (GIF Benzeri) SVG İllüstrasyon Sahnesi -->
+          <div id="card-illustration" class="w-full aspect-[16/10] rounded-2xl overflow-hidden bg-sky-50 border-2 border-slate-100 flex items-center justify-center pointer-events-none">
+            <!-- Aktif senaryonun hareketli SVG sahnesi buraya yüklenir -->
+          </div>
+
+          <!-- Öğretmen İpucu Açıklaması (İsteğe bağlı açılıp kapatılabilir) -->
+          <p id="card-label" class="mt-2 text-xs sm:text-sm font-bold text-slate-500 tracking-tight text-center pointer-events-none">
+            Oyuncağını arkadaşıyla paylaşmak
+          </p>
+        </div>
+      </div>
+    </main>
+
+    <!-- 3. ALT BÖLÜM: SİMETRİK, ORTALANMIŞ İKİ HEDEF KUTU (NEZAKET & KABALIK) -->
+    <section class="w-full max-w-4xl mx-auto grid grid-cols-2 gap-4 sm:gap-8 pb-1 sm:pb-2 shrink-0 relative z-10">
+
+      <!-- SOL KUTU: YEŞİL "NEZAKET" KUTUSU (Üstünde Büyük Gülücük) -->
+      <div id="box-good" data-type="good" role="button" tabindex="0" aria-label="Nezaket - İyi Davranışlar"
+        class="target-box relative rounded-[1.75rem] sm:rounded-[2.25rem] bg-gradient-to-b from-emerald-400 to-green-600 border-4 border-emerald-200 shadow-[0_8px_0_#15803d,0_14px_26px_rgba(22,163,74,0.32)] p-3 sm:p-4 flex flex-col items-center justify-between cursor-pointer overflow-hidden">
+
+        <!-- Üstte Büyük Gülücük Yüz İkonu -->
+        <div class="my-0.5 sm:my-1 flex items-center justify-center pointer-events-none">
+          <div class="w-16 h-16 sm:w-22 sm:h-22 rounded-full bg-yellow-300 border-4 border-amber-500 shadow-md flex items-center justify-center">
+            <svg viewBox="0 0 100 100" class="w-14 h-14 sm:w-18 sm:h-18">
+              <circle cx="50" cy="50" r="44" fill="#fde047" />
+              <!-- Mutlu Gözler -->
+              <circle cx="35" cy="40" r="6" fill="#78350f" />
+              <circle cx="65" cy="40" r="6" fill="#78350f" />
+              <circle cx="37" cy="38" r="2.2" fill="#ffffff" />
+              <circle cx="67" cy="38" r="2.2" fill="#ffffff" />
+              <!-- Pembe Yanaklar -->
+              <ellipse cx="23" cy="52" rx="7" ry="4" fill="#fb7185" opacity="0.65" />
+              <ellipse cx="77" cy="52" rx="7" ry="4" fill="#fb7185" opacity="0.65" />
+              <!-- Büyük Neşeli Gülümseme -->
+              <path d="M 30 56 Q 50 80 70 56 Z" fill="#ffffff" stroke="#78350f" stroke-width="4" stroke-linejoin="round" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Kutu Başlığı: NEZAKET -->
+        <div class="w-full bg-white/95 rounded-2xl py-1.5 sm:py-2 px-3 text-center shadow-inner pointer-events-none mt-1.5">
+          <span class="block text-green-700 font-black text-base sm:text-2xl tracking-wide">
+            Nezaket
+          </span>
+        </div>
+      </div>
+
+      <!-- SAĞ KUTU: KIRMIZI "KABALIK" KUTUSU (Üstünde Büyük Somurtan Yüz) -->
+      <div id="box-bad" data-type="bad" role="button" tabindex="0" aria-label="Kabalık - Kötü Davranışlar"
+        class="target-box relative rounded-[1.75rem] sm:rounded-[2.25rem] bg-gradient-to-b from-rose-500 to-red-600 border-4 border-rose-200 shadow-[0_8px_0_#991b1b,0_14px_26px_rgba(220,38,38,0.32)] p-3 sm:p-4 flex flex-col items-center justify-between cursor-pointer overflow-hidden">
+
+        <!-- Üstte Büyük Somurtan Yüz İkonu -->
+        <div class="my-0.5 sm:my-1 flex items-center justify-center pointer-events-none">
+          <div class="w-16 h-16 sm:w-22 sm:h-22 rounded-full bg-orange-200 border-4 border-red-800 shadow-md flex items-center justify-center">
+            <svg viewBox="0 0 100 100" class="w-14 h-14 sm:w-18 sm:h-18">
+              <circle cx="50" cy="50" r="44" fill="#fed7aa" />
+              <!-- Çatık Somurtan Kaşlar -->
+              <path d="M 24 31 L 42 38" stroke="#7f1d1d" stroke-width="5" stroke-linecap="round" />
+              <path d="M 76 31 L 58 38" stroke="#7f1d1d" stroke-width="5" stroke-linecap="round" />
+              <!-- Gözler -->
+              <circle cx="35" cy="45" r="5.5" fill="#450a0a" />
+              <circle cx="65" cy="45" r="5.5" fill="#450a0a" />
+              <!-- Somurtan / Üzgün Ağız -->
+              <path d="M 32 70 Q 50 53 68 70" fill="none" stroke="#7f1d1d" stroke-width="5.5" stroke-linecap="round" />
+            </svg>
+          </div>
+        </div>
+
+        <!-- Kutu Başlığı: KABALIK -->
+        <div class="w-full bg-white/95 rounded-2xl py-1.5 sm:py-2 px-3 text-center shadow-inner pointer-events-none mt-1.5">
+          <span class="block text-red-700 font-black text-base sm:text-2xl tracking-wide">
+            Kabalık
+          </span>
+        </div>
+      </div>
+
+    </section>
+  </div>
+
+  <!-- =======================================================================
+       BAŞLANGIÇ EKRANI (Tamamen Sessiz, Büyük Gülücük & Somurtan Yüz İkonlu)
+       ======================================================================= -->
+  <div id="start-screen" class="fixed inset-0 z-40 bg-gradient-to-b from-sky-200/95 via-white/95 to-emerald-100/95 backdrop-blur-md flex flex-col items-center justify-center p-6 text-center">
+    <div class="flex items-center justify-center gap-6 sm:gap-10 mb-5">
+      <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-yellow-300 border-4 border-amber-500 shadow-lg flex items-center justify-center text-5xl sm:text-6xl animate-bounce">
+        😊
+      </div>
+      <div class="w-20 h-20 sm:w-28 sm:h-28 rounded-full bg-rose-200 border-4 border-rose-500 shadow-lg flex items-center justify-center text-5xl sm:text-6xl">
+        😠
+      </div>
+    </div>
+
+    <h1 class="text-4xl sm:text-6xl font-black text-sky-950 drop-shadow-xs tracking-tight mb-2">
+      Nezaket mi, Kabalık mı?
+    </h1>
+    <p class="text-base sm:text-xl font-extrabold text-emerald-700 bg-white/90 px-6 py-1.5 rounded-full border-2 border-emerald-300 mb-8 shadow-xs">
+      1. Sınıf Akran Nezaketi Oyunu
+    </p>
+
+    <button id="btn-start-game" type="button"
+      class="play-btn-hero bg-gradient-to-b from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-white rounded-[2.5rem] px-10 py-5 sm:px-14 sm:py-7 border-4 border-green-200 flex items-center gap-4 sm:gap-5 cursor-pointer transition">
+      <span class="w-12 h-12 sm:w-16 sm:h-16 rounded-full bg-white text-green-600 flex items-center justify-center shadow-md">
+        <svg class="w-7 h-7 sm:w-10 sm:h-10 ml-1" viewBox="0 0 24 24" fill="currentColor">
+          <polygon points="6 4 20 12 6 20 6 4"></polygon>
+        </svg>
+      </span>
+      <span class="text-3xl sm:text-5xl font-black tracking-wider">OYNA</span>
+    </button>
+  </div>
+
+  <!-- =======================================================================
+       TUR SONU VE FİNAL KUTLAMA EKRANI
+       ======================================================================= -->
+  <div id="victory-screen" class="hidden fixed inset-0 z-40 bg-gradient-to-b from-amber-100/95 via-yellow-50/95 to-emerald-100/95 backdrop-blur-md flex flex-col items-center justify-center p-5 text-center">
+    <div class="flex items-center justify-center gap-1.5 sm:gap-2 mb-4 bg-white/90 px-4 py-2 rounded-full border-2 border-amber-300 shadow-xs">
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+      <span class="text-2xl sm:text-3xl">⭐</span>
+    </div>
+
+    <div class="w-28 h-28 sm:w-36 sm:h-36 mb-4 rounded-full bg-yellow-300 border-4 border-amber-500 shadow-xl flex items-center justify-center text-6xl sm:text-7xl star-filled">
+      🏆
+    </div>
+
+    <div class="bg-white/95 border-4 border-amber-400 rounded-3xl px-6 py-4 mb-6 shadow-lg max-w-lg">
+      <p id="victory-title" class="text-2xl sm:text-4xl font-black text-emerald-700 leading-tight">
+        Harika! Nezaket Kahramanı Oldun!
+      </p>
+      <p id="victory-subtitle" class="mt-1.5 text-sm sm:text-lg font-extrabold text-sky-700">
+        Tur 1/5 Tamamlandı • 32 Yeni Soru Kaldı
+      </p>
+    </div>
+
+    <div class="flex flex-col sm:flex-row items-center gap-3">
+      <button id="btn-next-round" type="button"
+        class="play-btn-hero bg-gradient-to-b from-green-400 to-green-600 hover:from-green-300 hover:to-green-500 text-white rounded-[2rem] px-8 py-4 sm:px-10 sm:py-5 border-4 border-green-200 flex items-center gap-3 cursor-pointer transition">
+        <span class="text-2xl">🌟</span>
+        <span id="btn-next-round-label" class="text-lg sm:text-2xl font-black tracking-wide">
+          Yeni Sorularla Oyna (Tur 2/5)
+        </span>
+      </button>
+
+      <button id="btn-reset-all" type="button"
+        class="bg-white hover:bg-sky-50 text-sky-800 border-2 border-sky-300 rounded-[2rem] px-6 py-3.5 sm:px-8 sm:py-4 font-black text-base sm:text-lg shadow-sm flex items-center gap-2 cursor-pointer transition">
+        <svg class="w-5 h-5" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.8" stroke-linecap="round" stroke-linejoin="round">
+          <path d="M3 12a9 9 0 1 0 9-9 9.75 9.75 0 0 0-6.74 2.74L3 8"></path>
+          <path d="M3 3v5h5"></path>
+        </svg>
+        <span id="btn-reset-all-label">Baştan Başla</span>
+      </button>
+    </div>
+  </div>
+
+  <!-- =======================================================================
+       40 HAREKETLİ SENARYO + RASTGELE TUR MOTORU + ÇALIŞAN YENİDEN BAŞLAT
+       ======================================================================= -->
+  <script>
+    /**
+     * 40 ADET HAREKETLİ (GIF BENZERİ) DAVRANIŞ SENARYOSU
+     * 20 'good' (Nezaket) + 20 'bad' (Kabalık)
+     * Her senaryo sürekli döngüde hareket eden CSS animasyonlu SVG katmanları içerir.
+     */
+    const SCENARIOS = [
+      // ==================== NEZAKET (1 - 20) ====================
+      {
+        id: 1,
+        type: 'good',
+        title: 'Yere düşen arkadaşının kalemlerini toplamaya yardım etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef9c3" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#fde047" opacity="0.6" />
+            <path class="anim-heart" d="M180 46 C180 46 160 33 160 21 C160 14 165 9 172 9 C176 9 179 12 180 14 C181 12 184 9 188 9 C195 9 200 14 200 21 C200 33 180 46 180 46 Z" fill="#f43f5e" />
+            <g class="anim-nod">
+              <circle cx="105" cy="96" r="28" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M77 90 Q105 60 133 90 Z" fill="#7c2d12" />
+              <circle cx="96" cy="95" r="3.5" fill="#1e293b" />
+              <circle cx="114" cy="95" r="3.5" fill="#1e293b" />
+              <path d="M97 107 Q105 116 113 107" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <path d="M80 186 L88 130 L124 130 L132 186 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+              <path class="anim-offer" d="M122 142 L162 174" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            </g>
+            <circle cx="255" cy="96" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M227 90 Q255 60 283 90 Z" fill="#1e293b" />
+            <circle cx="246" cy="95" r="3.5" fill="#1e293b" />
+            <circle cx="264" cy="95" r="3.5" fill="#1e293b" />
+            <path d="M247 107 Q255 116 263 107" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M228 186 L236 130 L272 130 L280 186 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M238 142 L198 172" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+            <rect x="165" y="176" width="32" height="14" rx="4" fill="#f97316" stroke="#9a3412" stroke-width="2" />
+            <line class="anim-lift-up" x1="145" y1="184" x2="168" y2="168" stroke="#ef4444" stroke-width="5" stroke-linecap="round" />
+            <line x1="195" y1="168" x2="218" y2="185" stroke="#eab308" stroke-width="5" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 2,
+        type: 'good',
+        title: 'Oyuncağını arkadaşıyla paylaşmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#dcfce7" />
+            <ellipse cx="180" cy="196" rx="155" ry="20" fill="#86efac" opacity="0.6" />
+            <path class="anim-heart" d="M180 54 C180 54 156 38 156 24 C156 16 162 11 170 11 C175 11 178 14 180 17 C182 14 185 11 190 11 C198 11 204 16 204 24 C204 38 180 54 180 54 Z" fill="#f43f5e" />
+            <circle cx="95" cy="90" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M65 84 Q95 50 125 84 Z" fill="#7c2d12" />
+            <circle cx="85" cy="88" r="4" fill="#1e293b" />
+            <circle cx="105" cy="88" r="4" fill="#1e293b" />
+            <path d="M86 101 Q95 112 104 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M66 186 L74 128 L116 128 L124 186 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <path d="M114 142 L152 146" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <circle cx="265" cy="90" r="31" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M235 84 Q265 52 295 84 Z" fill="#1e293b" />
+            <circle cx="255" cy="88" r="4" fill="#1e293b" />
+            <circle cx="275" cy="88" r="4" fill="#1e293b" />
+            <path d="M256 101 Q265 112 274 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M236 186 L244 128 L286 128 L294 186 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M246 142 L208 146" stroke="#fde68a" stroke-width="12" stroke-linecap="round" />
+            <g class="anim-offer">
+              <circle cx="180" cy="144" r="24" fill="#ffffff" stroke="#1e293b" stroke-width="3" />
+              <path d="M162 130 Q180 144 198 130 M162 158 Q180 144 198 158" fill="none" stroke="#ef4444" stroke-width="4" />
+              <circle cx="180" cy="144" r="7" fill="#facc15" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 3,
+        type: 'good',
+        title: 'Çeşme sırasında sabırla beklemek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#e0f2fe" />
+            <rect x="0" y="182" width="360" height="38" fill="#bae6fd" />
+            <rect x="282" y="72" width="44" height="110" rx="8" fill="#38bdf8" stroke="#0284c7" stroke-width="3" />
+            <path d="M282 112 H270 V122" fill="none" stroke="#0369a1" stroke-width="4" stroke-linecap="round" />
+            <path class="anim-tear" d="M270 126 Q267 134 270 138 Q273 134 270 126 Z" fill="#0ea5e9" />
+            <g class="anim-nod">
+              <circle cx="215" cy="95" r="22" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+              <path d="M193 90 Q215 68 237 90 Z" fill="#7c2d12" />
+              <circle cx="222" cy="93" r="3" fill="#1e293b" />
+              <path d="M216 103 Q223 109 229 103" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+              <rect x="197" y="120" width="36" height="62" rx="10" fill="#22c55e" stroke="#15803d" stroke-width="2.5" />
+            </g>
+            <circle cx="145" cy="95" r="22" fill="#fde68a" stroke="#92400e" stroke-width="2.5" />
+            <path d="M123 90 Q145 68 167 90 Z" fill="#1e293b" />
+            <circle cx="152" cy="93" r="3" fill="#1e293b" />
+            <path d="M146 103 Q153 109 159 103" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="127" y="120" width="36" height="62" rx="10" fill="#ec4899" stroke="#9d174d" stroke-width="2.5" />
+            <circle cx="75" cy="95" r="22" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+            <path d="M53 90 Q75 68 97 90 Z" fill="#92400e" />
+            <circle cx="82" cy="93" r="3" fill="#1e293b" />
+            <path d="M76 103 Q83 109 89 103" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="57" y="120" width="36" height="62" rx="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2.5" />
+            <g class="anim-heart">
+              <circle cx="145" cy="34" r="18" fill="#22c55e" />
+              <path d="M136 34 L143 41 L156 27" fill="none" stroke="#ffffff" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 4,
+        type: 'good',
+        title: 'Yere düşen arkadaşına elini uzatıp kaldırmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#dcfce7" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#86efac" opacity="0.7" />
+            <path class="anim-heart" d="M185 52 C185 52 167 39 167 27 C167 20 172 15 178 15 C182 15 184 18 185 20 C186 18 188 15 192 15 C198 15 203 20 203 27 C203 39 185 52 185 52 Z" fill="#f43f5e" />
+            <circle cx="112" cy="82" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M82 78 Q112 46 142 78 Z" fill="#7c2d12" />
+            <circle cx="103" cy="80" r="3.8" fill="#1e293b" />
+            <circle cx="121" cy="80" r="3.8" fill="#1e293b" />
+            <path d="M103 93 Q112 104 121 93" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M84 186 L92 120 L132 120 L140 186 Z" fill="#10b981" stroke="#065f46" stroke-width="3" />
+            <path d="M132 128 L188 144" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <g class="anim-lift-up">
+              <circle cx="248" cy="122" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M220 116 Q248 88 276 116 Z" fill="#1e293b" />
+              <circle cx="239" cy="121" r="3.5" fill="#1e293b" />
+              <circle cx="257" cy="121" r="3.5" fill="#1e293b" />
+              <path d="M240 135 Q248 130 256 135" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <path d="M222 192 L228 154 L268 154 L276 192 Z" fill="#f59e0b" stroke="#b45309" stroke-width="3" />
+              <path d="M192 186 L232 186" stroke="#3b82f6" stroke-width="14" stroke-linecap="round" />
+              <path d="M225 162 L188 144" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 5,
+        type: 'good',
+        title: 'Ağlayan arkadaşını teselli etmek ve sarılmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#f0fdf4" />
+            <ellipse cx="180" cy="198" rx="150" ry="20" fill="#bbf7d0" opacity="0.7" />
+            <path class="anim-heart" d="M180 54 C180 54 156 38 156 24 C156 16 162 11 170 11 C175 11 178 14 180 17 C182 14 185 11 190 11 C198 11 204 16 204 24 C204 38 180 54 180 54 Z" fill="#f43f5e" />
+            <circle cx="132" cy="94" r="31" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M101 88 Q132 56 163 88 Z" fill="#7c2d12" />
+            <circle cx="123" cy="93" r="3.8" fill="#1e293b" />
+            <circle cx="141" cy="93" r="3.8" fill="#1e293b" />
+            <path class="anim-tear" d="M115 99 Q111 109 115 113 Q119 109 115 99 Z" fill="#38bdf8" />
+            <path d="M123 108 Q132 102 141 108" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M104 188 L112 128 L152 128 L160 188 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3" />
+            <circle cx="226" cy="90" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M195 84 Q226 52 257 84 Z" fill="#1e293b" />
+            <circle cx="216" cy="88" r="3.8" fill="#1e293b" />
+            <circle cx="234" cy="88" r="3.8" fill="#1e293b" />
+            <path d="M216 101 Q225 112 234 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M198 188 L206 126 L246 126 L254 188 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <path class="anim-nod" d="M206 136 Q172 132 146 144" fill="none" stroke="#fed7aa" stroke-width="13" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 6,
+        type: 'good',
+        title: 'Yalnız duran arkadaşını oyuna davet etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fefce8" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#fde047" opacity="0.5" />
+            <circle cx="105" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M75 82 Q105 52 135 82 Z" fill="#7c2d12" />
+            <circle cx="96" cy="86" r="3.8" fill="#1e293b" />
+            <circle cx="114" cy="86" r="3.8" fill="#1e293b" />
+            <path d="M96 99 Q105 110 114 99" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M78 188 L86 124 L124 124 L132 188 Z" fill="#f97316" stroke="#c2410c" stroke-width="3" />
+            <path class="anim-wave" d="M124 134 L172 114" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <circle cx="62" cy="166" r="18" fill="#38bdf8" stroke="#0369a1" stroke-width="2.5" />
+            <path class="anim-heart" d="M180 76 C180 76 164 64 164 54 C164 48 169 44 174 44 C177 44 179 46 180 48 C181 46 183 44 186 44 C191 44 196 48 196 54 C196 64 180 76 180 76 Z" fill="#22c55e" />
+            <g class="anim-walk-in">
+              <circle cx="255" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M225 86 Q255 56 285 86 Z" fill="#1e293b" />
+              <circle cx="246" cy="90" r="3.8" fill="#1e293b" />
+              <circle cx="264" cy="90" r="3.8" fill="#1e293b" />
+              <path d="M247 103 Q255 112 263 103" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+              <path d="M228 188 L236 128 L274 128 L282 188 Z" fill="#8b5cf6" stroke="#5b21b6" stroke-width="3" />
+              <path d="M236 140 L198 134" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 7,
+        type: 'good',
+        title: 'Kalemini unutan arkadaşına kendi kalemini vermek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#ecfdf5" />
+            <rect x="40" y="156" width="280" height="54" rx="10" fill="#fde68a" stroke="#d97706" stroke-width="3" />
+            <circle cx="110" cy="84" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M80 78 Q110 48 140 78 Z" fill="#7c2d12" />
+            <circle cx="101" cy="82" r="3.8" fill="#1e293b" />
+            <circle cx="119" cy="82" r="3.8" fill="#1e293b" />
+            <path d="M101 95 Q110 105 119 95" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M84 156 L92 118 L128 118 L136 156 Z" fill="#10b981" stroke="#065f46" stroke-width="3" />
+            <g class="anim-offer">
+              <path d="M128 132 L175 128" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+              <rect x="160" y="114" width="46" height="10" rx="2" transform="rotate(-15 180 120)" fill="#facc15" stroke="#a16207" stroke-width="2" />
+              <polygon points="204,107 216,110 206,118" fill="#fed7aa" stroke="#9a3412" stroke-width="1.5" />
+            </g>
+            <circle cx="252" cy="84" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M222 78 Q252 48 282 78 Z" fill="#1e293b" />
+            <circle cx="243" cy="82" r="3.8" fill="#1e293b" />
+            <circle cx="261" cy="82" r="3.8" fill="#1e293b" />
+            <path d="M243 95 Q252 105 261 95" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M226 156 L234 118 L270 118 L278 156 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M234 134 L196 130" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 8,
+        type: 'good',
+        title: 'İstemeden çarpınca çiçek ve kalp uzatarak özür dilemek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fff1f2" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#fecdd3" opacity="0.6" />
+            <circle cx="110" cy="90" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M80 84 Q110 54 140 84 Z" fill="#451a03" />
+            <circle cx="101" cy="88" r="3.8" fill="#1e293b" />
+            <circle cx="119" cy="88" r="3.8" fill="#1e293b" />
+            <path d="M102 101 Q110 109 118 101" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M82 188 L90 126 L130 126 L138 188 Z" fill="#0ea5e9" stroke="#0369a1" stroke-width="3" />
+            <g class="anim-offer">
+              <path d="M128 140 L176 132" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+              <line x1="180" y1="148" x2="180" y2="112" stroke="#16a34a" stroke-width="4" stroke-linecap="round" />
+              <circle cx="180" cy="106" r="12" fill="#f43f5e" />
+              <circle cx="180" cy="106" r="5" fill="#fde047" />
+            </g>
+            <path class="anim-heart" d="M180 62 C180 62 162 48 162 36 C162 29 167 24 173 24 C176 24 179 27 180 29 C181 27 184 24 187 24 C193 24 198 29 198 36 C198 48 180 62 180 62 Z" fill="#ec4899" />
+            <circle cx="252" cy="90" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M222 84 Q252 54 282 84 Z" fill="#7c2d12" />
+            <circle cx="243" cy="88" r="3.8" fill="#1e293b" />
+            <circle cx="261" cy="88" r="3.8" fill="#1e293b" />
+            <path d="M243 101 Q252 111 261 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M224 188 L232 126 L272 126 L280 188 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 9,
+        type: 'good',
+        title: 'Yardım eden arkadaşına gülümseyerek teşekkür etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef9c3" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#fde047" opacity="0.6" />
+            <text class="anim-heart" x="164" y="54" font-size="30">💖</text>
+            <text x="128" y="48" font-size="20">✨</text>
+            <text x="210" y="48" font-size="20">✨</text>
+            <circle cx="110" cy="92" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M80 86 Q110 56 140 86 Z" fill="#7c2d12" />
+            <circle cx="101" cy="90" r="3.8" fill="#1e293b" />
+            <circle cx="119" cy="90" r="3.8" fill="#1e293b" />
+            <path d="M101 103 Q110 113 119 103" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M82 188 L90 128 L130 128 L138 188 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <g class="anim-nod">
+              <circle cx="250" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M220 86 Q250 56 280 86 Z" fill="#1e293b" />
+              <circle cx="241" cy="90" r="3.8" fill="#1e293b" />
+              <circle cx="259" cy="90" r="3.8" fill="#1e293b" />
+              <path d="M241 103 Q250 114 259 103" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+              <path d="M222 188 L230 128 L270 128 L278 188 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+              <path d="M230 142 L252 152" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+              <circle cx="254" cy="152" r="8" fill="#f43f5e" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 10,
+        type: 'good',
+        title: 'Öğretmeni veya arkadaşı konuşurken sessizce dinlemek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#e0f2fe" />
+            <rect x="30" y="162" width="300" height="48" rx="8" fill="#fed7aa" stroke="#c2410c" stroke-width="3" />
+            <circle cx="105" cy="84" r="32" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M73 78 Q105 44 137 78 Z" fill="#451a03" />
+            <circle cx="96" cy="82" r="3.8" fill="#1e293b" />
+            <circle cx="114" cy="82" r="3.8" fill="#1e293b" />
+            <path d="M97 96 Q105 106 113 96" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M76 162 L84 120 L126 120 L134 162 Z" fill="#8b5cf6" stroke="#5b21b6" stroke-width="3" />
+            <g class="anim-heart">
+              <rect x="144" y="34" width="52" height="32" rx="14" fill="#ffffff" stroke="#0284c7" stroke-width="2.5" />
+              <circle cx="158" cy="50" r="3" fill="#0284c7" />
+              <circle cx="170" cy="50" r="3" fill="#0284c7" />
+              <circle cx="182" cy="50" r="3" fill="#0284c7" />
+            </g>
+            <g class="anim-nod">
+              <circle cx="255" cy="90" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M225 84 Q255 54 285 84 Z" fill="#1e293b" />
+              <circle cx="246" cy="88" r="3.8" fill="#1e293b" />
+              <circle cx="264" cy="88" r="3.8" fill="#1e293b" />
+              <path d="M247 101 Q255 109 263 101" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+              <path d="M228 162 L236 124 L274 124 L282 162 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 11,
+        type: 'good',
+        title: 'Sınıfa yeni gelen arkadaşa hoş geldin deyip yer göstermek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#f0fdf4" />
+            <rect x="195" y="136" width="120" height="64" rx="8" fill="#fde68a" stroke="#d97706" stroke-width="3" />
+            <circle cx="105" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M75 82 Q105 52 135 82 Z" fill="#7c2d12" />
+            <circle cx="96" cy="86" r="3.8" fill="#1e293b" />
+            <circle cx="114" cy="86" r="3.8" fill="#1e293b" />
+            <path d="M96 99 Q105 110 114 99" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M78 190 L86 124 L124 124 L132 190 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <path class="anim-offer" d="M124 134 L182 134" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <g class="anim-nod">
+              <rect x="272" y="114" width="24" height="36" rx="6" fill="#ef4444" stroke="#991b1b" stroke-width="2" />
+              <circle cx="248" cy="88" r="29" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M219 82 Q248 52 277 82 Z" fill="#1e293b" />
+              <circle cx="239" cy="86" r="3.8" fill="#1e293b" />
+              <circle cx="257" cy="86" r="3.8" fill="#1e293b" />
+              <path d="M240 99 Q248 109 256 99" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+              <path d="M222 136 L230 120 L266 120 L274 136 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            </g>
+            <path class="anim-heart" d="M180 54 C180 54 162 40 162 28 C162 21 167 16 173 16 C176 16 179 19 180 21 C181 19 184 16 187 16 C193 16 198 21 198 28 C198 40 180 54 180 54 Z" fill="#f43f5e" />
+          </svg>
+        `
+      },
+      {
+        id: 12,
+        type: 'good',
+        title: 'Beslenme saatinde yiyeceğini arkadaşıyla bölüşmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef3c7" />
+            <rect x="35" y="160" width="290" height="50" rx="10" fill="#fed7aa" stroke="#d97706" stroke-width="3" />
+            <circle cx="105" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M75 82 Q105 52 135 82 Z" fill="#7c2d12" />
+            <circle cx="96" cy="86" r="3.8" fill="#1e293b" />
+            <circle cx="114" cy="86" r="3.8" fill="#1e293b" />
+            <path d="M96 99 Q105 110 114 99" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M78 160 L86 122 L124 122 L132 160 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <circle cx="255" cy="88" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M225 82 Q255 52 285 82 Z" fill="#1e293b" />
+            <circle cx="246" cy="86" r="3.8" fill="#1e293b" />
+            <circle cx="264" cy="86" r="3.8" fill="#1e293b" />
+            <path d="M246 99 Q255 110 264 99" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M228 160 L236 122 L274 122 L282 160 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <g class="anim-offer">
+              <circle cx="164" cy="144" r="16" fill="#d97706" stroke="#78350f" stroke-width="2" />
+              <circle cx="160" cy="140" r="2.5" fill="#451a03" />
+              <circle cx="168" cy="147" r="2.5" fill="#451a03" />
+              <circle cx="198" cy="144" r="16" fill="#ef4444" stroke="#991b1b" stroke-width="2" />
+            </g>
+            <path class="anim-heart" d="M180 54 C180 54 162 40 162 28 C162 21 167 16 173 16 C176 16 179 19 180 21 C181 19 184 16 187 16 C193 16 198 21 198 28 C198 40 180 54 180 54 Z" fill="#f43f5e" />
+          </svg>
+        `
+      },
+      {
+        id: 13,
+        type: 'good',
+        title: 'Kapıyı tutarak arkasından gelen arkadaşına yol vermek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#e0f2fe" />
+            <rect x="52" y="28" width="76" height="172" rx="6" fill="#d97706" stroke="#78350f" stroke-width="3" />
+            <circle cx="114" cy="116" r="5" fill="#fde047" />
+            <circle cx="145" cy="88" r="28" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M117 82 Q145 54 173 82 Z" fill="#7c2d12" />
+            <circle cx="137" cy="86" r="3.5" fill="#1e293b" />
+            <circle cx="153" cy="86" r="3.5" fill="#1e293b" />
+            <path d="M137 98 Q145 107 153 98" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M120 196 L128 122 L162 122 L170 196 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <path d="M128 134 L112 118" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <g class="anim-walk-in">
+              <circle cx="242" cy="92" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M214 86 Q242 58 270 86 Z" fill="#1e293b" />
+              <circle cx="234" cy="90" r="3.5" fill="#1e293b" />
+              <circle cx="250" cy="90" r="3.5" fill="#1e293b" />
+              <path d="M234 102 Q242 111 250 102" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+              <path d="M218 196 L226 126 L260 126 L268 196 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 14,
+        type: 'good',
+        title: 'Arkadaşının yaptığı resmi beğenip alkışlamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef9c3" />
+            <circle cx="105" cy="84" r="29" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M76 78 Q105 48 134 78 Z" fill="#7c2d12" />
+            <circle cx="96" cy="82" r="3.5" fill="#1e293b" />
+            <circle cx="114" cy="82" r="3.5" fill="#1e293b" />
+            <path d="M97 95 Q105 105 113 95" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M80 192 L88 120 L122 120 L130 192 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <rect x="132" y="106" width="66" height="54" rx="4" fill="#ffffff" stroke="#3b82f6" stroke-width="3" />
+            <circle cx="152" cy="122" r="7" fill="#facc15" />
+            <path d="M142 150 L158 132 L172 146 L182 135 L190 150 Z" fill="#22c55e" />
+            <circle cx="262" cy="84" r="29" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M233 78 Q262 48 291 78 Z" fill="#1e293b" />
+            <circle cx="253" cy="82" r="3.5" fill="#1e293b" />
+            <circle cx="271" cy="82" r="3.5" fill="#1e293b" />
+            <path d="M254 95 Q262 105 270 95" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M236 192 L244 120 L278 120 L286 192 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <text class="anim-clap" x="205" y="138" font-size="34">👏</text>
+            <text class="anim-heart" x="212" y="54" font-size="24">⭐</text>
+          </svg>
+        `
+      },
+      {
+        id: 15,
+        type: 'good',
+        title: 'Oyun bittiğinde oyuncakları birlikte kutuya toplamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#dcfce7" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#86efac" opacity="0.7" />
+            <rect x="142" y="138" width="76" height="54" rx="8" fill="#f59e0b" stroke="#b45309" stroke-width="3" />
+            <circle class="anim-lift-up" cx="165" cy="134" r="11" fill="#ef4444" />
+            <rect class="anim-nod" x="184" y="124" width="18" height="18" rx="3" fill="#3b82f6" />
+            <circle cx="96" cy="88" r="29" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M67 82 Q96 52 125 82 Z" fill="#7c2d12" />
+            <circle cx="87" cy="86" r="3.5" fill="#1e293b" />
+            <circle cx="105" cy="86" r="3.5" fill="#1e293b" />
+            <path d="M88 99 Q96 108 104 99" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M70 192 L78 124 L114 124 L122 192 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <path class="anim-offer" d="M114 138 L154 136" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <circle cx="264" cy="88" r="29" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M235 82 Q264 52 293 82 Z" fill="#1e293b" />
+            <circle cx="255" cy="86" r="3.5" fill="#1e293b" />
+            <circle cx="273" cy="86" r="3.5" fill="#1e293b" />
+            <path d="M256 99 Q264 108 272 99" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M238 192 L246 124 L282 124 L290 192 Z" fill="#8b5cf6" stroke="#5b21b6" stroke-width="3" />
+            <path d="M246 138 L206 136" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 16,
+        type: 'good',
+        title: 'Söz almak için sessizce parmak kaldırmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#e0f2fe" />
+            <rect x="65" y="156" width="230" height="54" rx="10" fill="#fde68a" stroke="#d97706" stroke-width="3" />
+            <circle cx="180" cy="88" r="34" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M146 82 Q180 46 214 82 Z" fill="#451a03" />
+            <circle cx="169" cy="86" r="4" fill="#1e293b" />
+            <circle cx="191" cy="86" r="4" fill="#1e293b" />
+            <path d="M170 100 Q180 112 190 100" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M148 156 L156 124 L204 124 L212 156 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <g class="anim-raise-hand">
+              <path d="M206 132 L226 52" stroke="#fed7aa" stroke-width="13" stroke-linecap="round" />
+              <circle cx="226" cy="48" r="9" fill="#fed7aa" stroke="#9a3412" stroke-width="2" />
+              <line x1="226" y1="42" x2="226" y2="26" stroke="#fed7aa" stroke-width="7" stroke-linecap="round" />
+            </g>
+            <g class="anim-heart">
+              <circle cx="262" cy="44" r="16" fill="#22c55e" />
+              <path d="M255 44 L260 49 L270 38" fill="none" stroke="#ffffff" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 17,
+        type: 'good',
+        title: 'Hasta olan arkadaşına geçmiş olsun kartı vermek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fff1f2" />
+            <circle cx="105" cy="90" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M75 84 Q105 54 135 84 Z" fill="#7c2d12" />
+            <circle cx="96" cy="88" r="3.8" fill="#1e293b" />
+            <circle cx="114" cy="88" r="3.8" fill="#1e293b" />
+            <path d="M96 101 Q105 111 114 101" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M78 190 L86 126 L124 126 L132 190 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <g class="anim-offer">
+              <path d="M124 138 L172 134" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+              <rect x="164" y="110" width="34" height="42" rx="4" fill="#ffffff" stroke="#f43f5e" stroke-width="3" />
+              <text x="171" y="138" font-size="18">❤️</text>
+            </g>
+            <g class="anim-nod">
+              <circle cx="255" cy="90" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M225 84 Q255 54 285 84 Z" fill="#1e293b" />
+              <rect x="236" y="72" width="38" height="10" rx="4" fill="#38bdf8" stroke="#0284c7" stroke-width="2" />
+              <circle cx="246" cy="92" r="3.5" fill="#1e293b" />
+              <circle cx="264" cy="92" r="3.5" fill="#1e293b" />
+              <path d="M247 103 Q255 112 263 103" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+              <path d="M228 190 L236 126 L274 126 L282 190 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 18,
+        type: 'good',
+        title: 'Salıncakta sırasını arkadaşına vermek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#dcfce7" />
+            <rect x="0" y="186" width="360" height="34" fill="#86efac" />
+            <line x1="175" y1="22" x2="295" y2="22" stroke="#475569" stroke-width="6" stroke-linecap="round" />
+            <g class="anim-swing">
+              <line x1="210" y1="22" x2="210" y2="145" stroke="#64748b" stroke-width="3" />
+              <line x1="265" y1="22" x2="265" y2="145" stroke="#64748b" stroke-width="3" />
+              <rect x="202" y="144" width="70" height="10" rx="4" fill="#f59e0b" stroke="#92400e" stroke-width="2" />
+              <circle cx="238" cy="96" r="24" fill="#fde68a" stroke="#92400e" stroke-width="2.5" />
+              <path d="M214 90 Q238 66 262 90 Z" fill="#1e293b" />
+              <circle cx="230" cy="94" r="3" fill="#1e293b" />
+              <circle cx="246" cy="94" r="3" fill="#1e293b" />
+              <path d="M231 104 Q238 112 245 104" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <rect x="218" y="122" width="40" height="24" rx="8" fill="#ec4899" />
+            </g>
+            <circle cx="96" cy="92" r="29" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M67 86 Q96 56 125 86 Z" fill="#7c2d12" />
+            <circle cx="87" cy="90" r="3.5" fill="#1e293b" />
+            <circle cx="105" cy="90" r="3.5" fill="#1e293b" />
+            <path d="M88 102 Q96 111 104 102" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M70 186 L78 126 L114 126 L122 186 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <path d="M114 136 L162 124" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <text class="anim-heart" x="142" y="64" font-size="26">💚</text>
+          </svg>
+        `
+      },
+      {
+        id: 19,
+        type: 'good',
+        title: 'Çöpünü yere atmayıp çöp kutusuna atmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#ecfdf5" />
+            <rect x="0" y="188" width="360" height="32" fill="#a7f3d0" />
+            <circle cx="128" cy="84" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M97 78 Q128 46 159 78 Z" fill="#451a03" />
+            <circle cx="119" cy="82" r="3.8" fill="#1e293b" />
+            <circle cx="137" cy="82" r="3.8" fill="#1e293b" />
+            <path d="M120 95 Q128 106 136 95" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M100 188 L108 120 L148 120 L156 188 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M148 130 L195 110" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+            <circle class="anim-toss-trash" cx="198" cy="106" r="10" fill="#ffffff" stroke="#64748b" stroke-width="2" />
+            <path d="M204 134 L212 188 L248 188 L256 134 Z" fill="#22c55e" stroke="#15803d" stroke-width="3" />
+            <text x="220" y="168" font-size="22">♻️</text>
+          </svg>
+        `
+      },
+      {
+        id: 20,
+        type: 'good',
+        title: 'Arkadaşıyla birlikte blok kulesi yapmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fefce8" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#fde047" opacity="0.5" />
+            <!-- Ortada Renkli Blok Kulesi -->
+            <rect x="162" y="162" width="36" height="24" rx="4" fill="#3b82f6" stroke="#1e40af" stroke-width="2" />
+            <rect x="162" y="138" width="36" height="24" rx="4" fill="#22c55e" stroke="#15803d" stroke-width="2" />
+            <rect class="anim-lift-up" x="162" y="110" width="36" height="24" rx="4" fill="#facc15" stroke="#a16207" stroke-width="2" />
+            <circle cx="96" cy="90" r="29" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M67 84 Q96 54 125 84 Z" fill="#7c2d12" />
+            <circle cx="87" cy="88" r="3.5" fill="#1e293b" />
+            <circle cx="105" cy="88" r="3.5" fill="#1e293b" />
+            <path d="M88 100 Q96 109 104 100" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M70 190 L78 124 L114 124 L122 190 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <path d="M114 134 L160 122" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <circle cx="264" cy="90" r="29" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M235 84 Q264 54 293 84 Z" fill="#1e293b" />
+            <circle cx="255" cy="88" r="3.5" fill="#1e293b" />
+            <circle cx="273" cy="88" r="3.5" fill="#1e293b" />
+            <path d="M256 100 Q264 109 272 100" fill="none" stroke="#1e293b" stroke-width="3.2" stroke-linecap="round" />
+            <path d="M238 190 L246 124 L282 124 L290 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M246 134 L200 122" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+          </svg>
+        `
+      },
+
+      // ==================== KABALIK (21 - 40) ====================
+      {
+        id: 21,
+        type: 'bad',
+        title: 'Arkadaşını itmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#fca5a5" opacity="0.5" />
+            <circle cx="115" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M86 82 Q115 52 144 82 Z" fill="#451a03" />
+            <path d="M102 78 L114 84 M128 78 L116 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="107" cy="89" r="3.8" fill="#1e293b" />
+            <circle cx="123" cy="89" r="3.8" fill="#1e293b" />
+            <path d="M106 105 Q115 96 124 105" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M88 188 L96 126 L136 126 L146 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path class="anim-shove" d="M126 134 L182 130" stroke="#fed7aa" stroke-width="13" stroke-linecap="round" />
+            <g class="anim-fall-back">
+              <circle cx="245" cy="96" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M216 90 Q245 60 274 90 Z" fill="#78350f" />
+              <circle cx="236" cy="95" r="3.8" fill="#1e293b" />
+              <circle cx="254" cy="95" r="3.8" fill="#1e293b" />
+              <path d="M262 100 Q267 110 262 114 Q257 110 262 100 Z" fill="#38bdf8" />
+              <ellipse cx="245" cy="111" rx="7" ry="6" fill="#991b1b" />
+              <path d="M218 190 L226 132 L264 132 L272 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 22,
+        type: 'bad',
+        title: 'Sıraya kaynak yapmak / önündekini itip sıraya girmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <rect x="0" y="182" width="360" height="38" fill="#fecaca" />
+            <!-- Sol Tarafta Çeşme / Kasa (Sıranın Başı) -->
+            <rect x="26" y="72" width="38" height="110" rx="8" fill="#38bdf8" stroke="#0284c7" stroke-width="3" />
+            <path d="M64 110 H76 V120" fill="none" stroke="#0369a1" stroke-width="4" stroke-linecap="round" />
+            <!-- Sırada Bekleyen 1. Çocuk (Kaynak Yapılınca İtilip Şaşırıyor) -->
+            <g class="anim-line-recoil">
+              <circle cx="118" cy="94" r="24" fill="#fde68a" stroke="#92400e" stroke-width="2.5" />
+              <path d="M94 88 Q118 64 142 88 Z" fill="#1e293b" />
+              <circle cx="111" cy="92" r="3.2" fill="#1e293b" />
+              <path d="M110 107 Q118 100 125 107" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <rect x="98" y="120" width="40" height="62" rx="10" fill="#3b82f6" stroke="#1e40af" stroke-width="2.5" />
+            </g>
+            <!-- Sırada Bekleyen 2. Çocuk -->
+            <circle cx="182" cy="96" r="24" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+            <path d="M158 90 Q182 66 206 90 Z" fill="#7c2d12" />
+            <circle cx="175" cy="94" r="3.2" fill="#1e293b" />
+            <path d="M174 108 Q182 102 188 108" fill="none" stroke="#1e293b" stroke-width="2.8" stroke-linecap="round" />
+            <rect x="162" y="122" width="40" height="60" rx="10" fill="#ec4899" stroke="#9d174d" stroke-width="2.5" />
+            <!-- Sağdan Atılıp Sıranın En Önüne Kaynak Yapmaya Çalışan Çocuk -->
+            <g class="anim-cut-line">
+              <circle cx="282" cy="86" r="26" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M256 80 Q282 52 308 80 Z" fill="#451a03" />
+              <path d="M268 78 L280 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+              <circle cx="274" cy="88" r="3.5" fill="#1e293b" />
+              <rect x="260" y="116" width="44" height="66" rx="12" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+              <path d="M260 138 L225 134" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+              <path d="M240 46 H274 M252 38 L240 46 L252 54" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round" stroke-linejoin="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 23,
+        type: 'bad',
+        title: 'Arkadaşının elindeki oyuncağı zorla çekip almak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#ffedd5" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#fdba74" opacity="0.5" />
+            <circle cx="92" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M62 86 Q92 56 122 86 Z" fill="#7c2d12" />
+            <path class="anim-tear" d="M76 98 Q71 110 76 115 Q81 110 76 98 Z" fill="#38bdf8" />
+            <path d="M82 108 Q92 98 102 108" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M64 188 L72 128 L112 128 L120 188 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3" />
+            <path d="M112 142 L156 142" stroke="#fde68a" stroke-width="11" stroke-linecap="round" />
+            <circle cx="268" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M238 82 Q268 52 298 82 Z" fill="#1e293b" />
+            <path d="M254 78 L266 84 M282 78 L270 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="260" cy="89" r="3.8" fill="#1e293b" />
+            <circle cx="276" cy="89" r="3.8" fill="#1e293b" />
+            <path d="M240 188 L248 126 L288 126 L296 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <g class="anim-snatch">
+              <path d="M246 140 L196 140" stroke="#fed7aa" stroke-width="12" stroke-linecap="round" />
+              <circle cx="176" cy="140" r="20" fill="#facc15" stroke="#a16207" stroke-width="3" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 24,
+        type: 'bad',
+        title: 'Düşen arkadaşına parmakla gösterip gülmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#fca5a5" opacity="0.5" />
+            <g class="anim-point-laugh">
+              <circle cx="105" cy="84" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M75 78 Q105 48 135 78 Z" fill="#451a03" />
+              <path d="M90 80 L100 84 L90 88 M120 80 L110 84 L120 88" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <ellipse cx="105" cy="98" rx="9" ry="7" fill="#dc2626" />
+              <path d="M78 188 L86 120 L124 120 L132 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+              <path d="M124 134 L178 148" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            </g>
+            <circle cx="248" cy="122" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M220 116 Q248 88 276 116 Z" fill="#1e293b" />
+            <circle cx="239" cy="121" r="3.5" fill="#1e293b" />
+            <circle cx="257" cy="121" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M266 125 Q271 135 266 140 Q261 135 266 125 Z" fill="#38bdf8" />
+            <path d="M238 138 Q248 130 258 138" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M222 192 L228 154 L268 154 L276 192 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <path d="M192 186 L232 186" stroke="#1d4ed8" stroke-width="14" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 25,
+        type: 'bad',
+        title: 'Arkadaşına dil çıkarmak ve alay etmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fce7f3" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#f9a8d4" opacity="0.5" />
+            <g class="anim-tongue">
+              <circle cx="105" cy="92" r="32" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M74 86 Q105 54 136 86 Z" fill="#451a03" />
+              <path d="M88 86 L98 90 L88 94 M122 86 L112 90 L122 94" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+              <path d="M98 106 L98 122 C98 128 112 128 112 122 L112 106 Z" fill="#f43f5e" stroke="#9f1239" stroke-width="2" />
+              <path d="M76 188 L84 128 L126 128 L134 188 Z" fill="#f97316" stroke="#c2410c" stroke-width="3" />
+            </g>
+            <circle cx="258" cy="96" r="32" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M227 90 Q258 58 289 90 Z" fill="#7c2d12" />
+            <circle cx="248" cy="94" r="3.8" fill="#1e293b" />
+            <circle cx="268" cy="94" r="3.8" fill="#1e293b" />
+            <path class="anim-tear" d="M276 102 Q282 114 276 120 Q270 114 276 102 Z" fill="#38bdf8" />
+            <path d="M246 114 Q258 102 270 114" fill="none" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <path d="M230 188 L238 132 L278 132 L286 188 Z" fill="#6366f1" stroke="#3730a3" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 26,
+        type: 'bad',
+        title: 'Arkadaşının kulağının dibinde yüksek sesle bağırmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <circle cx="105" cy="92" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M74 86 Q105 54 136 86 Z" fill="#451a03" />
+            <path d="M92 80 L104 86 M118 80 L106 86" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="97" cy="90" r="3.5" fill="#1e293b" />
+            <circle cx="113" cy="90" r="3.5" fill="#1e293b" />
+            <ellipse cx="108" cy="106" rx="11" ry="9" fill="#991b1b" />
+            <path d="M78 188 L86 128 L124 128 L132 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path class="anim-shout-wave" d="M148 82 Q162 96 148 110 M162 72 Q182 96 162 120 M176 62 Q202 96 176 130" fill="none" stroke="#dc2626" stroke-width="4.5" stroke-linecap="round" />
+            <g class="anim-line-recoil">
+              <circle cx="255" cy="96" r="31" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M224 90 Q255 58 286 90 Z" fill="#1e293b" />
+              <path d="M242 94 L250 98 L242 102 M268 94 L260 98 L268 102" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <path d="M246 112 Q255 104 264 112" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <path d="M228 188 L236 132 L274 132 L282 188 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+              <circle cx="222" cy="98" r="9" fill="#fde68a" stroke="#92400e" stroke-width="2" />
+              <circle cx="288" cy="98" r="9" fill="#fde68a" stroke="#92400e" stroke-width="2" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 27,
+        type: 'bad',
+        title: 'Arkadaşının yaptığı resmi karalamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <rect x="35" y="158" width="290" height="52" rx="10" fill="#fed7aa" stroke="#c2410c" stroke-width="3" />
+            <circle cx="105" cy="84" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M75 78 Q105 48 135 78 Z" fill="#451a03" />
+            <path d="M92 78 L104 84 M118 78 L106 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="97" cy="88" r="3.5" fill="#1e293b" />
+            <circle cx="113" cy="88" r="3.5" fill="#1e293b" />
+            <path d="M80 158 L88 120 L122 120 L130 158 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <rect x="150" y="114" width="60" height="44" rx="4" fill="#ffffff" stroke="#64748b" stroke-width="2.5" />
+            <path d="M158 124 Q180 148 202 122 Q165 150 198 150" fill="none" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />
+            <path class="anim-scribble" d="M122 134 L176 136" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <circle cx="258" cy="88" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M228 82 Q258 52 288 82 Z" fill="#7c2d12" />
+            <circle cx="249" cy="86" r="3.5" fill="#1e293b" />
+            <circle cx="267" cy="86" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M242 94 Q238 104 242 109 Q246 104 242 94 Z" fill="#38bdf8" />
+            <path d="M249 104 Q258 96 267 104" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M232 158 L240 122 L276 122 L284 158 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 28,
+        type: 'bad',
+        title: 'Arkadaşını oyundan kovmak ve dışlamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#fca5a5" opacity="0.5" />
+            <circle cx="110" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M80 82 Q110 52 140 82 Z" fill="#451a03" />
+            <path d="M96 78 L108 84 M124 78 L112 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="102" cy="88" r="3.5" fill="#1e293b" />
+            <circle cx="118" cy="88" r="3.5" fill="#1e293b" />
+            <path d="M101 104 Q110 96 119 104" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M82 188 L90 124 L130 124 L138 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path class="anim-shove" d="M130 134 L176 128" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <g class="anim-shout-wave">
+              <circle cx="180" cy="68" r="18" fill="#dc2626" />
+              <path d="M172 60 L188 76 M188 60 L172 76" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+            </g>
+            <circle cx="255" cy="94" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M225 88 Q255 58 285 88 Z" fill="#1e293b" />
+            <circle cx="246" cy="92" r="3.5" fill="#1e293b" />
+            <circle cx="264" cy="92" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M240 100 Q236 110 240 115 Q244 110 240 100 Z" fill="#38bdf8" />
+            <path d="M246 110 Q255 102 264 110" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M228 188 L236 130 L274 130 L282 188 Z" fill="#6366f1" stroke="#3730a3" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 29,
+        type: 'bad',
+        title: 'Başkası konuşurken sözünü kesip bağırmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <circle cx="105" cy="94" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M75 88 Q105 58 135 88 Z" fill="#7c2d12" />
+            <circle cx="96" cy="92" r="3.5" fill="#1e293b" />
+            <circle cx="114" cy="92" r="3.5" fill="#1e293b" />
+            <path d="M97 108 Q105 101 113 108" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M78 190 L86 130 L124 130 L132 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <g class="anim-point-laugh">
+              <circle cx="252" cy="88" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M221 82 Q252 50 283 82 Z" fill="#451a03" />
+              <circle cx="243" cy="86" r="3.8" fill="#1e293b" />
+              <circle cx="261" cy="86" r="3.8" fill="#1e293b" />
+              <ellipse cx="250" cy="102" rx="10" ry="8" fill="#dc2626" />
+              <path d="M224 190 L232 124 L272 124 L280 190 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            </g>
+            <g class="anim-shout-wave">
+              <rect x="132" y="34" width="84" height="34" rx="12" fill="#ffffff" stroke="#dc2626" stroke-width="3" />
+              <path d="M164 38 L184 64 M184 38 L164 64" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 30,
+        type: 'bad',
+        title: 'Arkadaşına çarpıp arkasına bakmadan kaçmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#ffedd5" />
+            <ellipse cx="180" cy="198" rx="155" ry="18" fill="#fdba74" opacity="0.5" />
+            <circle cx="105" cy="122" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M77 116 Q105 88 133 116 Z" fill="#7c2d12" />
+            <circle cx="96" cy="120" r="3.5" fill="#1e293b" />
+            <circle cx="114" cy="120" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M88 126 Q84 136 88 141 Q92 136 88 126 Z" fill="#38bdf8" />
+            <path d="M97 136 Q105 129 113 136" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M80 192 L86 154 L124 154 L132 192 Z" fill="#a855f7" stroke="#6b21a8" stroke-width="3" />
+            <g class="anim-run-dash">
+              <circle cx="268" cy="84" r="28" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M240 78 Q268 50 296 78 Z" fill="#1e293b" />
+              <circle cx="276" cy="82" r="3.5" fill="#1e293b" />
+              <path d="M244 186 L254 118 L288 118 L298 186 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+              <path d="M192 84 H228 M182 104 H222 M196 124 H232" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />
+            </g>
+          </svg>
+        `
+      },
+      {
+        id: 31,
+        type: 'bad',
+        title: 'Arkadaşının kalem kutusunu izinsiz alıp saklamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <circle cx="105" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M75 86 Q105 56 135 86 Z" fill="#7c2d12" />
+            <circle cx="96" cy="90" r="3.5" fill="#1e293b" />
+            <circle cx="114" cy="90" r="3.5" fill="#1e293b" />
+            <path d="M97 106 Q105 99 113 106" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M78 190 L86 128 L124 128 L132 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <text class="anim-heart" x="96" y="50" font-size="26">❓</text>
+            <circle cx="255" cy="90" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M225 84 Q255 54 285 84 Z" fill="#1e293b" />
+            <circle cx="246" cy="88" r="3.5" fill="#1e293b" />
+            <circle cx="264" cy="88" r="3.5" fill="#1e293b" />
+            <path d="M248 102 Q256 98 264 103" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M228 190 L236 126 L274 126 L282 190 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <rect class="anim-yank-bag" x="274" y="136" width="34" height="22" rx="5" fill="#facc15" stroke="#a16207" stroke-width="2.5" />
+          </svg>
+        `
+      },
+      {
+        id: 32,
+        type: 'bad',
+        title: 'Arkadaşına sırtını dönüp dışlamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#f1f5f9" />
+            <ellipse cx="180" cy="198" rx="150" ry="18" fill="#cbd5e1" opacity="0.6" />
+            <circle cx="115" cy="88" r="30" fill="#451a03" stroke="#1e293b" stroke-width="3" />
+            <path d="M86 190 L94 122 L136 122 L144 190 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path d="M92 146 H138" stroke="#991b1b" stroke-width="6" stroke-linecap="round" />
+            <circle cx="250" cy="94" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M220 88 Q250 58 280 88 Z" fill="#7c2d12" />
+            <circle cx="241" cy="92" r="3.5" fill="#1e293b" />
+            <circle cx="259" cy="92" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M234 100 Q230 110 234 115 Q238 110 234 100 Z" fill="#38bdf8" />
+            <path d="M242 110 Q250 102 258 110" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M224 190 L232 130 L268 130 L276 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            <text class="anim-heart" x="172" y="84" font-size="28">💔</text>
+          </svg>
+        `
+      },
+      {
+        id: 33,
+        type: 'bad',
+        title: 'Sınıf içinde koşup arkadaşlarına çarpmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <rect x="24" y="156" width="84" height="44" rx="6" fill="#fde68a" stroke="#d97706" stroke-width="2.5" />
+            <g class="anim-run-dash">
+              <circle cx="155" cy="84" r="29" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+              <path d="M126 78 Q155 48 184 78 Z" fill="#451a03" />
+              <circle cx="163" cy="82" r="3.5" fill="#1e293b" />
+              <path d="M130 186 L142 118 L176 118 L186 186 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+              <path d="M86 86 H118 M80 106 H114" stroke="#dc2626" stroke-width="4" stroke-linecap="round" />
+            </g>
+            <g class="anim-fall-back">
+              <circle cx="262" cy="106" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+              <path d="M234 100 Q262 72 290 100 Z" fill="#1e293b" />
+              <circle cx="253" cy="104" r="3.5" fill="#1e293b" />
+              <circle cx="271" cy="104" r="3.5" fill="#1e293b" />
+              <path d="M254 120 Q262 113 270 120" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <path d="M236 190 L244 138 L280 138 L288 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+            </g>
+            <text class="anim-shout-wave" x="196" y="96" font-size="28">💥</text>
+          </svg>
+        `
+      },
+      {
+        id: 34,
+        type: 'bad',
+        title: 'Arkadaşının suyunu veya beslenmesini izinsiz almak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#ffedd5" />
+            <rect x="35" y="160" width="290" height="50" rx="10" fill="#fed7aa" stroke="#d97706" stroke-width="3" />
+            <circle cx="105" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M75 86 Q105 56 135 86 Z" fill="#7c2d12" />
+            <circle cx="96" cy="90" r="3.5" fill="#1e293b" />
+            <circle cx="114" cy="90" r="3.5" fill="#1e293b" />
+            <path d="M97 106 Q105 99 113 106" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M78 160 L86 126 L124 126 L132 160 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <circle cx="255" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M225 82 Q255 52 285 82 Z" fill="#451a03" />
+            <circle cx="246" cy="86" r="3.5" fill="#1e293b" />
+            <circle cx="264" cy="86" r="3.5" fill="#1e293b" />
+            <path d="M228 160 L236 122 L274 122 L282 160 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <rect class="anim-snatch" x="196" y="114" width="22" height="36" rx="6" fill="#38bdf8" stroke="#0284c7" stroke-width="2.5" />
+          </svg>
+        `
+      },
+      {
+        id: 35,
+        type: 'bad',
+        title: 'Salıncakta hiç inmeden başkasına sıra vermemek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <rect x="0" y="186" width="360" height="34" fill="#fca5a5" opacity="0.6" />
+            <line x1="175" y1="22" x2="295" y2="22" stroke="#475569" stroke-width="6" stroke-linecap="round" />
+            <g class="anim-swing">
+              <line x1="210" y1="22" x2="210" y2="145" stroke="#64748b" stroke-width="3" />
+              <line x1="265" y1="22" x2="265" y2="145" stroke="#64748b" stroke-width="3" />
+              <rect x="202" y="144" width="70" height="10" rx="4" fill="#f59e0b" stroke="#92400e" stroke-width="2" />
+              <circle cx="238" cy="96" r="24" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+              <path d="M214 90 Q238 66 262 90 Z" fill="#451a03" />
+              <path d="M226 86 L236 91 M250 86 L240 91" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+              <circle cx="230" cy="95" r="3" fill="#1e293b" />
+              <circle cx="246" cy="95" r="3" fill="#1e293b" />
+              <rect x="218" y="122" width="40" height="24" rx="8" fill="#ef4444" />
+            </g>
+            <circle cx="96" cy="94" r="29" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M67 88 Q96 58 125 88 Z" fill="#1e293b" />
+            <circle cx="87" cy="92" r="3.5" fill="#1e293b" />
+            <circle cx="105" cy="92" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M80 100 Q76 110 80 115 Q84 110 80 100 Z" fill="#38bdf8" />
+            <path d="M88 109 Q96 102 104 109" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M70 186 L78 128 L114 128 L122 186 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 36,
+        type: 'bad',
+        title: 'Arkadaşının çantasını çekmek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <circle cx="110" cy="92" r="30" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M80 86 Q110 56 140 86 Z" fill="#7c2d12" />
+            <circle cx="101" cy="90" r="3.5" fill="#1e293b" />
+            <circle cx="119" cy="90" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M94 98 Q90 108 94 113 Q98 108 94 98 Z" fill="#38bdf8" />
+            <path d="M102 108 Q110 100 118 108" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M82 190 L90 128 L130 128 L138 190 Z" fill="#ec4899" stroke="#9d174d" stroke-width="3" />
+            <rect class="anim-yank-bag" x="132" y="128" width="28" height="38" rx="6" fill="#3b82f6" stroke="#1e40af" stroke-width="2.5" />
+            <circle cx="255" cy="88" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M225 82 Q255 52 285 82 Z" fill="#451a03" />
+            <path d="M242 78 L254 84 M268 78 L256 84" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="247" cy="88" r="3.5" fill="#1e293b" />
+            <circle cx="263" cy="88" r="3.5" fill="#1e293b" />
+            <path d="M228 190 L236 124 L274 124 L282 190 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path class="anim-yank-bag" d="M236 138 L162 142" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 37,
+        type: 'bad',
+        title: 'Çöpünü yere atmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <rect x="0" y="188" width="360" height="32" fill="#fecaca" />
+            <circle cx="115" cy="86" r="30" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M85 80 Q115 50 145 80 Z" fill="#451a03" />
+            <circle cx="106" cy="84" r="3.5" fill="#1e293b" />
+            <circle cx="124" cy="84" r="3.5" fill="#1e293b" />
+            <path d="M108 98 Q116 93 124 98" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M88 188 L96 122 L134 122 L142 188 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path d="M134 134 L182 146" stroke="#fed7aa" stroke-width="11" stroke-linecap="round" />
+            <circle class="anim-drop-trash" cx="195" cy="148" r="9" fill="#ffffff" stroke="#64748b" stroke-width="2" />
+            <circle cx="222" cy="184" r="8" fill="#facc15" stroke="#a16207" stroke-width="2" />
+            <rect x="242" y="176" width="22" height="12" rx="3" fill="#38bdf8" stroke="#0284c7" stroke-width="2" />
+            <circle cx="255" cy="70" r="18" fill="#dc2626" />
+            <path d="M247 62 L263 78 M263 62 L247 78" stroke="#ffffff" stroke-width="4" stroke-linecap="round" />
+          </svg>
+        `
+      },
+      {
+        id: 38,
+        type: 'bad',
+        title: 'Oyun kaybedince kızıp blokları tekmelemek',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <circle cx="115" cy="92" r="31" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M84 86 Q115 54 146 86 Z" fill="#451a03" />
+            <path d="M100 80 L114 86 M130 80 L116 86" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="106" cy="90" r="3.5" fill="#1e293b" />
+            <circle cx="124" cy="90" r="3.5" fill="#1e293b" />
+            <ellipse cx="115" cy="107" rx="9" ry="7" fill="#991b1b" />
+            <path d="M88 184 L96 128 L134 128 L142 184 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <path class="anim-kick" d="M132 178 L174 168" stroke="#1e293b" stroke-width="12" stroke-linecap="round" />
+            <g class="anim-block-fly">
+              <rect x="202" y="96" width="22" height="22" rx="4" fill="#3b82f6" stroke="#1e3a8a" stroke-width="2" />
+              <circle cx="246" cy="114" r="14" fill="#facc15" stroke="#a16207" stroke-width="2" />
+              <rect x="224" y="142" width="22" height="22" rx="4" fill="#22c55e" stroke="#14532d" stroke-width="2" />
+            </g>
+            <text class="anim-shout-wave" x="152" y="56" font-size="26">💢</text>
+          </svg>
+        `
+      },
+      {
+        id: 39,
+        type: 'bad',
+        title: 'Fısıldaşarak yanındaki arkadaşını dışlamak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fef2f2" />
+            <g class="anim-nod">
+              <circle cx="82" cy="92" r="27" fill="#fed7aa" stroke="#9a3412" stroke-width="2.5" />
+              <path d="M55 86 Q82 58 109 86 Z" fill="#451a03" />
+              <circle cx="90" cy="90" r="3.2" fill="#1e293b" />
+              <path d="M58 190 L66 124 L100 124 L108 190 Z" fill="#ef4444" stroke="#991b1b" stroke-width="2.5" />
+              <circle cx="144" cy="92" r="27" fill="#fde68a" stroke="#92400e" stroke-width="2.5" />
+              <path d="M117 86 Q144 58 171 86 Z" fill="#1e293b" />
+              <circle cx="136" cy="90" r="3.2" fill="#1e293b" />
+              <path d="M120 190 L128 124 L162 124 L170 190 Z" fill="#f97316" stroke="#c2410c" stroke-width="2.5" />
+            </g>
+            <text x="98" y="54" font-size="22">🤫</text>
+            <circle cx="268" cy="96" r="29" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M239 90 Q268 60 297 90 Z" fill="#7c2d12" />
+            <circle cx="259" cy="94" r="3.5" fill="#1e293b" />
+            <circle cx="277" cy="94" r="3.5" fill="#1e293b" />
+            <path class="anim-tear" d="M252 102 Q248 112 252 117 Q256 112 252 102 Z" fill="#38bdf8" />
+            <path d="M260 111 Q268 104 276 111" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M242 190 L250 130 L286 130 L294 190 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+          </svg>
+        `
+      },
+      {
+        id: 40,
+        type: 'bad',
+        title: 'Kapıyı arkasından gelen arkadaşının yüzüne kapatmak',
+        svg: `
+          <svg viewBox="0 0 360 220" class="w-full h-full">
+            <rect width="360" height="220" fill="#fee2e2" />
+            <circle cx="105" cy="90" r="28" fill="#fed7aa" stroke="#9a3412" stroke-width="3" />
+            <path d="M77 84 Q105 56 133 84 Z" fill="#451a03" />
+            <path d="M96 80 L110 86" stroke="#1e293b" stroke-width="3.5" stroke-linecap="round" />
+            <circle cx="112" cy="90" r="3.5" fill="#1e293b" />
+            <path d="M80 194 L88 124 L122 124 L130 194 Z" fill="#ef4444" stroke="#991b1b" stroke-width="3" />
+            <rect class="anim-door-swing" x="148" y="28" width="56" height="172" rx="6" fill="#92400e" stroke="#451a03" stroke-width="3" />
+            <text class="anim-shout-wave" x="206" y="102" font-size="24">💥</text>
+            <circle cx="268" cy="94" r="28" fill="#fde68a" stroke="#92400e" stroke-width="3" />
+            <path d="M240 88 Q268 60 296 88 Z" fill="#1e293b" />
+            <circle cx="259" cy="92" r="3.5" fill="#1e293b" />
+            <circle cx="277" cy="92" r="3.5" fill="#1e293b" />
+            <path d="M260 108 Q268 101 276 108" fill="none" stroke="#1e293b" stroke-width="3" stroke-linecap="round" />
+            <path d="M242 194 L250 128 L286 128 L294 194 Z" fill="#3b82f6" stroke="#1e40af" stroke-width="3" />
+          </svg>
+        `
+      }
+    ];
+
+    /**
+     * OYUN MOTORU:
+     * - Her turda oynanmamış havuzdan rastgele 4 Nezaket + 4 Kabalık sorusu seçer ve karıştırır.
+     * - "Yeniden Başlat" tuşuna basıldığında tüm zamanlayıcıları ve sürükleme kilidini anında sıfırlar.
+     */
+    const GameApp = (() => {
+      const CARDS_PER_ROUND = 8;
+      const TOTAL_ROUNDS = 5;
+
+      let usedScenarioIds = new Set();
+      let currentRound = 1;
+      let deck = [];
+      let currentIndex = 0;
+      let isCardSelected = false;
+      let isAnimating = false;
+      let showTeacherHint = true;
+
+      // Aktif zamanlayıcıları takip et (Yeniden Başlat basıldığında hepsi iptal edilir)
+      let activeTimers = [];
+      let confettiFrameId = null;
+
+      // Pointer Sürükleme Durumu
+      let activePointerId = null;
+      let startX = 0;
+      let startY = 0;
+      let currentX = 0;
+      let currentY = 0;
+      let lastPointerX = 0;
+      let lastPointerY = 0;
+
+      // DOM Elemanları
+      const startScreen = document.getElementById('start-screen');
+      const victoryScreen = document.getElementById('victory-screen');
+      const roundIndicator = document.getElementById('round-indicator');
+      const starsContainer = document.getElementById('stars-container');
+      const cardEl = document.getElementById('behavior-card');
+      const cardIllusEl = document.getElementById('card-illustration');
+      const cardLabelEl = document.getElementById('card-label');
+      const boxGood = document.getElementById('box-good');
+      const boxBad = document.getElementById('box-bad');
+      const correctBadge = document.getElementById('feedback-badge-correct');
+      const retryBadge = document.getElementById('feedback-badge-retry');
+      const effectsLayer = document.getElementById('effects-layer');
+      const btnToggleHint = document.getElementById('btn-toggle-hint');
+
+      const victoryTitle = document.getElementById('victory-title');
+      const victorySubtitle = document.getElementById('victory-subtitle');
+      const btnNextRound = document.getElementById('btn-next-round');
+      const btnNextRoundLabel = document.getElementById('btn-next-round-label');
+      const btnResetAllLabel = document.getElementById('btn-reset-all-label');
+
+      function scheduleTimer(callback, delay) {
+        const id = setTimeout(() => {
+          activeTimers = activeTimers.filter((t) => t !== id);
+          callback();
+        }, delay);
+        activeTimers.push(id);
+        return id;
+      }
+
+      function clearAllTimers() {
+        activeTimers.forEach((id) => clearTimeout(id));
+        activeTimers = [];
+        if (confettiFrameId !== null) {
+          cancelAnimationFrame(confettiFrameId);
+          confettiFrameId = null;
+        }
+        const canvas = document.getElementById('confetti-canvas');
+        if (canvas) {
+          const ctx = canvas.getContext('2d');
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          canvas.classList.add('hidden');
+        }
+      }
+
+      function shuffleArray(arr) {
+        const copy = [...arr];
+        for (let i = copy.length - 1; i > 0; i--) {
+          const j = Math.floor(Math.random() * (i + 1));
+          [copy[i], copy[j]] = [copy[j], copy[i]];
+        }
+        return copy;
+      }
+
+      function buildBalancedDeckForRound() {
+        const unusedGood = shuffleArray(
+          SCENARIOS.filter((s) => s.type === 'good' && !usedScenarioIds.has(s.id))
+        );
+        const unusedBad = shuffleArray(
+          SCENARIOS.filter((s) => s.type === 'bad' && !usedScenarioIds.has(s.id))
+        );
+
+        const selectedGood = unusedGood.slice(0, 4);
+        const selectedBad = unusedBad.slice(0, 4);
+        const roundCards = shuffleArray([...selectedGood, ...selectedBad]);
+
+        roundCards.forEach((card) => usedScenarioIds.add(card.id));
+        return roundCards;
+      }
+
+      function updateRoundIndicator() {
+        const cardNumber = Math.min(currentIndex + 1, CARDS_PER_ROUND);
+        roundIndicator.textContent = `Tur ${currentRound}/${TOTAL_ROUNDS} • ${cardNumber}/${CARDS_PER_ROUND}`;
+      }
+
+      function renderStars() {
+        starsContainer.innerHTML = '';
+        for (let i = 0; i < CARDS_PER_ROUND; i++) {
+          const isFilled = i < currentIndex;
+          const starWrapper = document.createElement('div');
+          starWrapper.className = `w-6 h-6 sm:w-8 sm:h-8 flex items-center justify-center rounded-full transition-all ${
+            isFilled ? 'bg-amber-200 star-filled shadow-xs' : 'bg-white'
+          }`;
+
+          starWrapper.innerHTML = isFilled
+            ? `<svg class="w-5 h-5 sm:w-6 sm:h-6 text-amber-500" viewBox="0 0 24 24" fill="currentColor" stroke="#b45309" stroke-width="1.5">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+               </svg>`
+            : `<svg class="w-4 h-4 sm:w-5 sm:h-5 text-slate-300" viewBox="0 0 24 24" fill="currentColor">
+                <polygon points="12 2 15.09 8.26 22 9.27 17 14.14 18.18 21.02 12 17.77 5.82 21.02 7 14.14 2 9.27 8.91 8.26 12 2"></polygon>
+               </svg>`;
+
+          starsContainer.appendChild(starWrapper);
+        }
+        updateRoundIndicator();
+      }
+
+      function renderCurrentCard() {
+        isCardSelected = false;
+        isAnimating = false;
+        activePointerId = null;
+
+        cardEl.classList.remove(
+          'dragging',
+          'card-selected',
+          'card-shake',
+          'border-orange-400',
+          'ring-4',
+          'ring-orange-200',
+          'opacity-0'
+        );
+        retryBadge.classList.add('hidden');
+        resetCardPosition(false);
+
+        const item = deck[currentIndex];
+        if (!item) return;
+        cardIllusEl.innerHTML = item.svg;
+        cardLabelEl.textContent = item.title;
+        cardLabelEl.classList.toggle('hidden', !showTeacherHint);
+        updateRoundIndicator();
+      }
+
+      function resetCardPosition(animate = true) {
+        currentX = 0;
+        currentY = 0;
+        cardEl.style.transition = animate
+          ? 'transform 0.34s cubic-bezier(0.34, 1.56, 0.64, 1)'
+          : 'none';
+        cardEl.style.transform = 'translate3d(0px, 0px, 0px) scale(1) rotate(0deg)';
+        clearBoxHighlights();
+      }
+
+      function clearBoxHighlights() {
+        boxGood.classList.remove('hover-green');
+        boxBad.classList.remove('hover-red');
+      }
+
+      function getHoveredBox(pointerX, pointerY) {
+        const cardRect = cardEl.getBoundingClientRect();
+        const cardCenterX = cardRect.left + cardRect.width / 2;
+        const cardCenterY = cardRect.top + cardRect.height / 2;
+        const pad = 24;
+
+        function isInside(rect, x, y) {
+          return (
+            x >= rect.left - pad &&
+            x <= rect.right + pad &&
+            y >= rect.top - pad &&
+            y <= rect.bottom + pad
+          );
+        }
+
+        const goodRect = boxGood.getBoundingClientRect();
+        const badRect = boxBad.getBoundingClientRect();
+
+        if (isInside(goodRect, pointerX, pointerY) || isInside(goodRect, cardCenterX, cardCenterY)) {
+          return 'good';
+        }
+        if (isInside(badRect, pointerX, pointerY) || isInside(badRect, cardCenterX, cardCenterY)) {
+          return 'bad';
+        }
+        return null;
+      }
+
+      function spawnStarBurst(targetBox) {
+        const rect = targetBox.getBoundingClientRect();
+        const centerX = rect.left + rect.width / 2;
+        const centerY = rect.top + rect.height / 3;
+        const emojis = ['⭐', '🌟', '✨', '💖', '💚', '😊'];
+
+        for (let i = 0; i < 14; i++) {
+          const el = document.createElement('div');
+          el.className = 'burst-particle';
+          el.textContent = emojis[i % emojis.length];
+          el.style.left = `${centerX}px`;
+          el.style.top = `${centerY}px`;
+          effectsLayer.appendChild(el);
+
+          const angle = (Math.PI * 2 * i) / 14 + (Math.random() * 0.4 - 0.2);
+          const dist = 70 + Math.random() * 110;
+          const tx = Math.cos(angle) * dist;
+          const ty = Math.sin(angle) * dist - 40;
+
+          requestAnimationFrame(() => {
+            el.style.transform = `translate(${tx}px, ${ty}px) scale(${0.9 + Math.random() * 0.6}) rotate(${Math.random() * 360}deg)`;
+            el.style.opacity = '0';
+          });
+
+          scheduleTimer(() => el.remove(), 850);
+        }
+      }
+
+      function handleAnswer(chosenType) {
+        if (isAnimating) return;
+        const currentItem = deck[currentIndex];
+        if (!currentItem) return;
+
+        const targetBox = chosenType === 'good' ? boxGood : boxBad;
+        clearBoxHighlights();
+        isCardSelected = false;
+        cardEl.classList.remove('card-selected');
+
+        if (chosenType === currentItem.type) {
+          isAnimating = true;
+
+          targetBox.classList.add('box-celebrate');
+          scheduleTimer(() => targetBox.classList.remove('box-celebrate'), 650);
+
+          spawnStarBurst(targetBox);
+
+          correctBadge.classList.remove('hidden');
+          scheduleTimer(() => correctBadge.classList.add('hidden'), 650);
+
+          const boxRect = targetBox.getBoundingClientRect();
+          const cardRect = cardEl.getBoundingClientRect();
+          const dx = (boxRect.left + boxRect.width / 2) - (cardRect.left + cardRect.width / 2);
+          const dy = (boxRect.top + boxRect.height / 2) - (cardRect.top + cardRect.height / 2);
+
+          cardEl.style.transition = 'transform 0.4s ease-in, opacity 0.36s ease-in';
+          cardEl.style.transform = `translate3d(${currentX + dx}px, ${currentY + dy}px, 0) scale(0.15) rotate(${chosenType === 'good' ? -12 : 12}deg)`;
+          cardEl.classList.add('opacity-0');
+
+          currentIndex++;
+          renderStars();
+
+          scheduleTimer(() => {
+            isAnimating = false;
+            if (currentIndex >= deck.length) {
+              showVictoryScreen();
+            } else {
+              renderCurrentCard();
+            }
+          }, 780);
+        } else {
+          isAnimating = true;
+          resetCardPosition(true);
+
+          cardEl.classList.add('border-orange-400', 'ring-4', 'ring-orange-200');
+          retryBadge.classList.remove('hidden');
+
+          cardEl.classList.remove('card-shake');
+          void cardEl.offsetWidth;
+          cardEl.classList.add('card-shake');
+
+          scheduleTimer(() => {
+            cardEl.classList.remove('card-shake', 'border-orange-400', 'ring-4', 'ring-orange-200');
+            retryBadge.classList.add('hidden');
+            isAnimating = false;
+          }, 680);
+        }
+      }
+
+      function setupInteractions() {
+        cardEl.addEventListener('pointerdown', (e) => {
+          if (isAnimating || activePointerId !== null) return;
+
+          activePointerId = e.pointerId;
+          startX = e.clientX - currentX;
+          startY = e.clientY - currentY;
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+
+          cardEl.classList.add('dragging');
+          cardEl.style.transition = 'none';
+
+          try {
+            cardEl.setPointerCapture(e.pointerId);
+          } catch (_) {}
+        });
+
+        window.addEventListener('pointermove', (e) => {
+          if (activePointerId === null || e.pointerId !== activePointerId || isAnimating) return;
+
+          currentX = e.clientX - startX;
+          currentY = e.clientY - startY;
+          lastPointerX = e.clientX;
+          lastPointerY = e.clientY;
+
+          const rotateDeg = Math.max(-14, Math.min(14, currentX * 0.045));
+          cardEl.style.transform = `translate3d(${currentX}px, ${currentY}px, 0) scale(1.03) rotate(${rotateDeg}deg)`;
+
+          const hovered = getHoveredBox(lastPointerX, lastPointerY);
+          clearBoxHighlights();
+          if (hovered === 'good') boxGood.classList.add('hover-green');
+          if (hovered === 'bad') boxBad.classList.add('hover-red');
+        });
+
+        function finishPointerDrag(e) {
+          if (activePointerId === null || e.pointerId !== activePointerId) return;
+
+          const pid = activePointerId;
+          activePointerId = null;
+          cardEl.classList.remove('dragging');
+
+          try {
+            if (cardEl.hasPointerCapture(pid)) {
+              cardEl.releasePointerCapture(pid);
+            }
+          } catch (_) {}
+
+          if (isAnimating) return;
+
+          const moveDistance = Math.hypot(currentX, currentY);
+          const hovered = getHoveredBox(lastPointerX, lastPointerY);
+
+          if (hovered) {
+            handleAnswer(hovered);
+          } else if (moveDistance < 12) {
+            resetCardPosition(true);
+            isCardSelected = !isCardSelected;
+            cardEl.classList.toggle('card-selected', isCardSelected);
+          } else {
+            resetCardPosition(true);
+          }
+        }
+
+        window.addEventListener('pointerup', finishPointerDrag);
+        window.addEventListener('pointercancel', finishPointerDrag);
+
+        boxGood.addEventListener('click', () => {
+          if (!isAnimating) handleAnswer('good');
+        });
+
+        boxBad.addEventListener('click', () => {
+          if (!isAnimating) handleAnswer('bad');
+        });
+
+        // Öğretmen İpucu Aç/Kapat
+        btnToggleHint.addEventListener('click', () => {
+          showTeacherHint = !showTeacherHint;
+          btnToggleHint.textContent = showTeacherHint ? 'İpucu: Açık' : 'İpucu: Kapalı';
+          cardLabelEl.classList.toggle('hidden', !showTeacherHint);
+        });
+
+        // Üst Çubuktaki Yeniden Başlat Butonu (Tüm zamanlayıcıları temizleyip 1. turdan sıfırlar)
+        document.getElementById('btn-restart-top').addEventListener('click', (e) => {
+          e.preventDefault();
+          e.stopPropagation();
+          resetAllAndStart();
+        });
+      }
+
+      function showVictoryScreen() {
+        const remainingQuestions = SCENARIOS.length - usedScenarioIds.size;
+        const hasMoreRounds = remainingQuestions >= CARDS_PER_ROUND && currentRound < TOTAL_ROUNDS;
+
+        if (hasMoreRounds) {
+          victoryTitle.textContent = 'Harika! Nezaket Kahramanı Oldun!';
+          victorySubtitle.textContent = `Tur ${currentRound}/${TOTAL_ROUNDS} Tamamlandı • ${remainingQuestions} Yeni Soru Kaldı`;
+          btnNextRound.classList.remove('hidden');
+          btnNextRoundLabel.textContent = `Yeni Sorularla Oyna (Tur ${currentRound + 1}/${TOTAL_ROUNDS})`;
+          btnResetAllLabel.textContent = 'Baştan Başla';
+        } else {
+          victoryTitle.textContent = 'Tebrikler! Tüm 40 Soru Tamamlandı!';
+          victorySubtitle.textContent = '5 Turun Tamamını Başarıyla Bitirdin! 🏆';
+          btnNextRound.classList.add('hidden');
+          btnResetAllLabel.textContent = 'Baştan Başla (40 Soruyu Sıfırla)';
+        }
+
+        victoryScreen.classList.remove('hidden');
+        launchConfetti();
+      }
+
+      function launchConfetti() {
+        const canvas = document.getElementById('confetti-canvas');
+        canvas.classList.remove('hidden');
+        const ctx = canvas.getContext('2d');
+        canvas.width = window.innerWidth;
+        canvas.height = window.innerHeight;
+
+        const colors = ['#facc15', '#22c55e', '#3b82f6', '#f43f5e', '#a855f7', '#fb923c'];
+        const pieces = Array.from({ length: 110 }, () => ({
+          x: Math.random() * canvas.width,
+          y: Math.random() * -canvas.height,
+          w: 10 + Math.random() * 10,
+          h: 6 + Math.random() * 8,
+          color: colors[Math.floor(Math.random() * colors.length)],
+          vy: 2.5 + Math.random() * 4,
+          vx: -2 + Math.random() * 4,
+          rot: Math.random() * 360,
+          vRot: -6 + Math.random() * 12
+        }));
+
+        function render() {
+          ctx.clearRect(0, 0, canvas.width, canvas.height);
+          let active = false;
+
+          pieces.forEach((p) => {
+            p.x += p.vx;
+            p.y += p.vy;
+            p.rot += p.vRot;
+            if (p.y < canvas.height + 30) active = true;
+
+            ctx.save();
+            ctx.translate(p.x, p.y);
+            ctx.rotate((p.rot * Math.PI) / 180);
+            ctx.fillStyle = p.color;
+            ctx.fillRect(-p.w / 2, -p.h / 2, p.w, p.h);
+            ctx.restore();
+          });
+
+          if (active && !victoryScreen.classList.contains('hidden')) {
+            confettiFrameId = requestAnimationFrame(render);
+          } else {
+            ctx.clearRect(0, 0, canvas.width, canvas.height);
+            canvas.classList.add('hidden');
+            confettiFrameId = null;
+          }
+        }
+        render();
+      }
+
+      function startNextRound() {
+        clearAllTimers();
+        if (usedScenarioIds.size >= SCENARIOS.length) {
+          resetAllAndStart();
+          return;
+        }
+        currentRound++;
+        startRoundInternal();
+      }
+
+      function resetAllAndStart() {
+        clearAllTimers();
+        if (activePointerId !== null) {
+          try {
+            if (cardEl.hasPointerCapture(activePointerId)) {
+              cardEl.releasePointerCapture(activePointerId);
+            }
+          } catch (_) {}
+          activePointerId = null;
+        }
+        usedScenarioIds.clear();
+        currentRound = 1;
+        effectsLayer.innerHTML = '';
+        startRoundInternal();
+      }
+
+      function startRoundInternal() {
+        isAnimating = false;
+        isCardSelected = false;
+        activePointerId = null;
+
+        victoryScreen.classList.add('hidden');
+        startScreen.classList.add('hidden');
+        correctBadge.classList.add('hidden');
+        retryBadge.classList.add('hidden');
+        boxGood.classList.remove('box-celebrate', 'hover-green');
+        boxBad.classList.remove('box-celebrate', 'hover-red');
+
+        deck = buildBalancedDeckForRound();
+        currentIndex = 0;
+        renderStars();
+        renderCurrentCard();
+      }
+
+      function init() {
+        renderStars();
+        setupInteractions();
+
+        document.getElementById('btn-start-game').addEventListener('click', () => {
+          resetAllAndStart();
+        });
+
+        btnNextRound.addEventListener('click', () => {
+          startNextRound();
+        });
+
+        document.getElementById('btn-reset-all').addEventListener('click', () => {
+          resetAllAndStart();
+        });
+      }
+
+      return { init };
+    })();
+
+    window.addEventListener('DOMContentLoaded', () => {
+      GameApp.init();
+    });
+  </script>
+</body>
+</html>
